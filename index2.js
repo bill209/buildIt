@@ -9,7 +9,7 @@ var prompt = require('prompt');
 var format = require("string-template")
 var request = require("request")
 var fs = require('fs');
-var Q = require('q');
+var q = require('q');
 
 var url = 'http://localhost/repos/buildIt/schema.json';
 
@@ -36,69 +36,37 @@ function exit(){
 }
 
 function buildFiles(result){
-	console.log('buildFiles');
-	processTemplate('templates/test1.tpl', result);
-}
-// readFileUsingPromises.js
-function processTemplate(fname, options){
-	Q.nfcall(fs.readFile, fname, "utf-8")
-	.then(function(tpl) {
-		var page = format(tpl,options);
-		console.log('page\n\r',page);
-	})
-	.fail(function(err) {
-			console.error('Error received:', err);
-	})
-	.done();
-}
+	var path = 'templates/';
+	var queue = [];
 
-function processTemplate222(pathToFile) {
-	return Q.nfcall(fs.readFile, pathToFile, "utf-8")
-	.then(function(tpl) {
-			console.log(tpl);
-//				return [Q.nfcall(fs.readFile, 'templates/test2.tpl', "utf-8")];
-			var options = { headers: {'User-Agent': 'MyAgent'} }; // github requires user agent string
-			return [Q.nfcall(request, 'https://api.github.com/repos/'+repo+'/collaborators', options),
-							Q.nfcall(request, 'https://api.github.com/repos/'+repo+'/commits', options)];
+	files = ['index.tpl','test1.tpl','test2.tpl'];
 
+	for (var i = files.length - 1; i >= 0; i--) {
+		queue.push(readFile(path + files[i]));
+	};
 
-	})
-	.spread(function(collaboratorsRes, commitsRes) {
-			return [collaboratorsRes[1], commitsRes[1]];  // return the response body
-	})
-	.fail(function(err) {
-			console.error('***errror***', err)
-			return err;
-	});
-}
-// actual call
-// processTemplate222('templates/test1.tpl').then(function(responses) {
-// 	console.log('responses',responses);
-// 		// do something with the responses
-// });
-
-
-
-
-function getResults(pathToFile) {
-	return Q.nfcall(fs.readFile, pathToFile, "utf-8")
-	.then(function(repo) {
-			var options = { headers: {'User-Agent': 'MyAgent'} }; // github requires user agent string
-			return [Q.nfcall(request, 'https://api.github.com/repos/'+repo+'/collaborators', options),
-						Q.nfcall(request, 'https://api.github.com/repos/'+repo+'/commits', options)];
-	})
-	.spread(function(collaboratorsRes, commitsRes) {
-			return [collaboratorsRes[1], commitsRes[1]];  // return the response body
-	})
-	.fail(function(err) {
-			console.error(err)
-			return err;
+	q.all(queue).then(function(ful) {
+		console.log('fulfilled', ful);
+	}, function(rej) {
+		console.log('rejected', rej);
+	}).fail(function(err) {
+		console.log('fail', err);
+	}).fin(function() {
+		console.log('finally');
+		exit();
 	});
 }
 
-// actual call
-// getResults('templates/test1.tpl').then(function(responses) {
-// 	console.log('responses',responses);
-// 		// do something with the responses
-// });
 
+function readFile(fname){
+	var deferred = q.defer();
+
+	fs.readFile(fname, 'utf8', function (error, text) {
+		if (error) {
+			deferred.reject(error);
+		} else {
+			deferred.resolve(text);
+		}
+	});
+	return deferred.promise;
+}
