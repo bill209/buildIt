@@ -5,71 +5,78 @@ http.createServer(function (req, res) {
 }).listen(1337, '127.0.0.1');
 console.log('Server running at http://127.0.0.1:1337/');
 
-	var prompt = require('prompt');
-	var format = require("string-template")
-	var deferred = require('deferred');
-	var request = require("request")
-	var fs = require('fs');
+var prompt = require('prompt');
+var format = require("string-template")
+var request = require("request")
+var FS = require('fs');
+var Q = require('q');
 
-	var file = '';
-	var deferred = require('deferred'), getSchema;
-	var schema={};
-	var url = 'http://localhost/repos/buildIt/schema.json';
+var url = 'http://localhost/repos/buildIt/schema.json';
+var resultsObj = {};
 
-
-
-
-
-// provides the schema via a promise
-getSchema = function () {
-	var d = deferred();
-	request({url: url, json: true}, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-			console.log('<-------------------------------->');
-			console.log(body.substring(0,30));
-			console.log('<-------------------------------->');
-			d.resolve(body)
-		} else {
-			console.log(response.statusCode);
-		}
-	});
-	return d.promise;
-};
-
-
-// provides the schema via a promise
-getSchemazzz = function () {
-	var d = deferred();
-
-	file='schema2.js';
-	fs.readFile(file, 'utf8', function(err, str){
-		if(err){
-			console.log(err);
-		} else {
-			d.resolve(str);
-		}
-	});
-	return d.promise;
-};
-
-// gets the schema and call the templating process
-getSchema().then(function self() {
-//	schema=JSON.parse(str);
-//	return value;
-}).done(function (result) {
-console.log('result',result);
-//	getUserInput();
+request({url: url}, function (error, response, body) {
+	if (!error && response.statusCode == 200) {
+		var schema  = JSON.parse(body);
+		getUserInput(schema);
+	} else {
+		console.log(response.statusCode);
+	}
 });
 
-
-function getUserInput(){
+function getUserInput(schema){
 	prompt.delimiter = ":  ".green;
 	prompt.start();
-console.log(schema);
 	prompt.get(schema, function (err, result) {
-
-	console.log('Command-line input received:');
-	console.log('  name: ' + result.name);
-	console.log('  password: ' + result.password);
+		resultsObj = result;
+		buildFiles();
 	});
 }
+
+function exit(){
+	console.log('\r\n\r\n\r\n');
+	process.exit(code=0);
+}
+
+function buildFiles(){
+	var path = 'templates/';
+	var queue = [];
+
+	files = ['index.tpl','test1.tpl','test2.tpl'];
+
+	for (var i = 0; i < files.length; i++) {
+		readFile(path + files[i])
+		.then(changeText)
+		.then(outputResults)
+		.fail(function (error) {
+			console.log('Something went wrong: ' + error.message);
+		}).fin(function(){
+			console.log('THE END');
+		});
+	};
+}
+
+function readFile(fname){
+	var deferred = Q.defer();
+
+	FS.readFile(fname, 'utf8', function (error, text) {
+		if (error) {
+			deferred.reject(error);
+		} else {
+			deferred.resolve(text);
+		}
+	});
+	return deferred.promise;
+}
+
+var changeText = function (tpl) {
+	var d = Q.defer();
+	page = format(tpl, resultsObj);
+	d.resolve(page);
+	return d.promise;
+};
+
+var outputResults = function (newpage) {
+	var d = Q.defer();
+	console.log('*********data********\r\n');
+	console.log(newpage);
+};
