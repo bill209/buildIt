@@ -1,0 +1,28 @@
+{
+	"properties": {
+		"author": {
+			"description": "your name",
+			"message": "you really should know this",
+			"default": "billbobb",
+			"required": true
+		},
+		"appName": {
+			"description": "name of your app",
+			"message": "come on, give it a name",
+			"default": "appster",
+			"required": true
+		},
+		"multiPage": {
+			"description": "include multi-page routing",
+			"message": "live large",
+			"default": "y",
+			"required": true
+		},
+		"ajax": {
+			"description": "include AJAX examples",
+			"message": "just do it",
+			"default": "y",
+			"required": true
+		}
+	}
+}
