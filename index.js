@@ -11,24 +11,47 @@ var request = require("request")
 var FS = require('fs');
 var Q = require('q');
 
-var url = 'http://localhost/repos/buildIt/schema.json';
+var schemaUrl = 'http://localhost/repos/buildIt/schema.json';
+var tplDataUrl = 'http://localhost/repos/buildIt/tpl_data.json';
 var resultsObj = {};
+var schema = getJson(schemaUrl);
 
-request({url: url}, function (error, response, body) {
-	if (!error && response.statusCode == 200) {
-		var schema  = JSON.parse(body);
-		getUserInput(schema);
-	} else {
-		console.log(response.statusCode);
-	}
-});
+var jade = require('jade');
+
+var tpl = 'h3 =d.title
+p = 'hi ' + d.content
+';
+
+var d = { 'title' : 'is it working?', 'content' : 'world' };
+// compile
+var fn = jade.compile(tpl);
+var html = fn(locals);
+console.log('html',html);
+// render
+//var html = jade.render('string of jade', merge(options, locals));
+
+// renderFile
+//var html = jade.renderFile('filename.jade', merge(options, locals));
+
+
+
+function getJson(fname){
+	request({url: fname}, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var schema  = JSON.parse(body);
+			getUserInput(schema);
+		} else {
+			console.log('Error: ',response.statusCode);
+		}
+	});
+}
 
 function getUserInput(schema){
 	prompt.delimiter = ":  ".green;
 	prompt.start();
 	prompt.get(schema, function (err, result) {
 		resultsObj = result;
-		buildFiles();
+//		buildFiles();
 	});
 }
 
