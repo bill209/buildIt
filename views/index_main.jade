@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Template</title>
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="js/libs/bootstrap-3.3.4/css/bootstrap.min.css">
+	<!-- 	<link rel="stylesheet" href="js/libs/bootstrap-3.3.4/css/bootstrap-narrow-jumbotron.css"> -->
+	<link rel="stylesheet" href="css/main.css">
+</head>
+
+<body ng-app="AppName" ng-controller='bodyCtrl' ng-style='bodyBgColor'>
+<a href="#/main">main</a><br/>
+<a href="#/restCalls/1010">rest calls</a><br/>
+	<div ng-view></div>
+
+	<script src="js/libs/jquery/jquery-2.0.3.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<!--	<script src="js/libs/angular/angular.min.js"></script> -->
+	<script src="js/libs/angular/angular-route.js"></script>
+	<script src="js/libs/bootstrap/js/bootstrap.min.js"></script>
+	<script src='js/main.js'></script>
+	<script src='js/controllers.js'></script>
+	<script src='js/functions.js'></script>
+	<script src='js/db.js'></script>
+	<!-- firebase -->
+	<script src="https://cdn.firebase.com/v0/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/0.7.1/angularfire.min.js"></script>
+</body>
+</html>
