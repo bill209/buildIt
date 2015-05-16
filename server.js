@@ -1,6 +1,6 @@
 //create an app server
 var express = require("express");
-  var app = express();
+var app = express();
 //set path to the views (template) directory
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -13,14 +13,17 @@ function User(name, email) {
   this.email = email;
 }
 
-var users = [
+var d = { 'title' : 'Angular App' };
+
+d.users = [
     new User('tj', 'tj@vision-media.ca')
   , new User('ciaran', 'ciaranj@gmail.com')
   , new User('aaron', 'aaron.heckmann+github@gmail.com')
 ];
 
+console.log('d',d);
 app.get('/', function(req, res){
-  res.render('index', { users: users });
+  res.render('index', { d:d });
 });
 //listen on localhost:3000
 app.listen(3000);

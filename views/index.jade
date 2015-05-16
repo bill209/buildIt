@@ -1,7 +1,8 @@
 extends layout
 
 block content
+  h1= d.title
   h1 Users
   #users
-    for user in users
+    for user in d.users
       include user
