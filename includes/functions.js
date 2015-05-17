@@ -12,7 +12,7 @@ module.exports.getJson = function (fname){
 			var schema  = JSON.parse(result);
 			deferred.resolve(schema);
 		} else {
-			deferred.reject('Error: ',response.statusCode);
+			deferred.reject('getJson error: ',response.statusCode);
 		}
 	});
 	return deferred.promise;
@@ -27,25 +27,42 @@ module.exports.getUserInput = function(schema){
 		if (!err) {
 			deferred.resolve(result);
 		} else {
-			deferred.reject('Error: ',response.statusCode);
+			deferred.reject('getUserInput error: ',response.statusCode);
 		}
 	});
 	return deferred.promise;
 }
 
-module.exports.buildFiles = function(dObj){
+module.exports.buildFile = function(values){
 	var deferred = Q.defer();
 
 	FS.readFile('views/layout.jade', 'utf8', function (err, data) {
 		if (err){
-			deferred.reject('error: ' + err);
+			deferred.reject('buildFile error: ' + err);
 		} else {
 			var options = { 'filename': path.join(__dirname, 'layout.jade'), 'pretty': '\t'}
 			var fn = jade.compile(data,options);
-			var html = fn(dObj);
-			console.log('html\r\n',html);
+			var html = fn(values);
 			deferred.resolve(html);
 		}
 	});
 	return deferred.promise;
+}
+
+module.exports.writeFile = function(html){
+	var deferred = Q.defer();
+	fname = 'test2.html';
+	FS.writeFile(fname, html, function (err) {
+		if (err) {
+			deferred.reject('writeFile error: ' + err)
+		} else {
+			deferred.resolve('\r\n\r\nfile ' + fname + ' has been successfully written')
+		}
+	});
+	return deferred.promise;
+}
+
+module.exports.exit = function(msg){
+	console.log('\r\n', msg, '\r\n\r\n');
+	process.exit(code=0);
 }
