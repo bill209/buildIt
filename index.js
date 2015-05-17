@@ -18,12 +18,9 @@ func.getJson(schemaUrl)
 			func.buildFiles(results)
  			.then(function(data){
  				console.log('data - HTML',data);
- 			}).fail(function(e){ console.log('error reading test3.txt: ',e) });
-
-		}).fail(function(e){ console.log('error reading test2.txt: ',e) });
-
-	})
-	.fail(function(e){ console.log('error reading test3.txt: ',e) });
+ 			}).fail(function(e){ console.log('getJson error: ',e) });
+		}).fail(function(e){ console.log('getUserInput error: ',e) });
+	}).fail(function(e){ console.log('buildFiles error: ',e) });
 
 function temp(x){
 	return x;
