@@ -21,9 +21,9 @@ d.users = [
   , new User('aaron', 'aaron.heckmann+github@gmail.com')
 ];
 
-console.log('d',d);
 app.get('/', function(req, res){
   res.render('index', { d:d });
 });
 //listen on localhost:3000
 app.listen(3000);
+console.log('Server running at http://127.0.0.1:3000/');
