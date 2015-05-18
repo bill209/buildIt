@@ -1,6 +1,7 @@
 var FS = require('fs');
 var Q = require('q');
 var func = require('./includes/functions.js');
+CURDIR = __dirname;
 
 var schemaUrl = 'http://localhost/repos/buildIt/schema.prompt';
 var schemaFile = 'schema.json';
@@ -12,11 +13,6 @@ func.readFile(schemaFile)
 		.then(function(results){
 			func.buildManyFiles(results)
 			.then(function(x){
-				console.log('xxxxxxxxxxxxxxxxxx - ',x.length);
-//			}).fail(function(e){ console.log('3',e) });
-			// func.buildFile(results)
- 		// 	.then(function(html){
-// 				func.writeFile(html)
  				func.writeManyFiles(x)
  				.then(function(msg){
 					console.log(msg);

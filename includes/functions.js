@@ -6,20 +6,31 @@ var FS = require('fs');
  var path = require('path');
 var jade = require('jade');
 
+/*
+	input:  user input from prompt
+	return filename, html
+*/
 exports.buildManyFiles = function(values){
 	var deferred = Q.defer();
 
 	var builds = [];
-	var filesToBuild = ['test.jade', 'test.jade'];
+	var filesToBuild = [{ 'fname' : 'TEST.html', 'tplName' : 'test.jade'},{ 'fname' : 'TEST2.html', 'tplName' : 'test.jade'}];
+
 	var dir = 'views/';
 	for (var i = 0; i < filesToBuild.length; i++) {
-		builds.push(this.buildFile(dir + filesToBuild[i], values));
+		/* call buildFile with:
+				the files to generate: ie  index.html, main.css...,
+				name of the template file: ie index.jade...,
+				and the user input values from prompt
+		*/
+		builds.push(this.buildFile( { 'filename' : filesToBuild[i].fname, 'tplName' : dir + filesToBuild[i].tplName, 'values' : values } ));
 	};
 
 	var bunchOPromises = Q.all(builds);
 
 	bunchOPromises
 	.then(function (results) {
+		// this contains an array of the
 		deferred.resolve(results);
 	}).fail(function(e){
 		deferred.reject('buildManyFiles error: ', e);
@@ -27,35 +38,34 @@ exports.buildManyFiles = function(values){
 	return deferred.promise;
 };
 
-exports.buildFile = function(file, values){
+/*
+	input:
+		files to generate, name of the template file, user input values
+	return:
+		name of files to generate,
+		and the content that will go inside those files
+*/
+exports.buildFile = function(data){
 	var deferred = Q.defer();
-
-	FS.readFile(file, 'utf8', function (err, data) {
+	FS.readFile(data.tplName, 'utf8', function (err, tplFile) {
 		if (err){
 			deferred.reject('buildFile error: ' + err);
 		} else {
-			var options = { 'filename': path.join(__dirname, 'layout.jade'), 'pretty': '\t'}
-			var fn = jade.compile(data,options);
-			var html = fn(values);
-			deferred.resolve(html + 'XXXX:' + file);
+			var fn = CURDIR + '/' + data.tplName;
+			var options = { 'filename': fn, 'pretty': '\t'}
+			var fn = jade.compile(tplFile, options);
+			var html = fn(data.values);
+			deferred.resolve({ 'html' : html, 'filename' : data.filename});
 		}
 	});
 	return deferred.promise;
 }
 
-
-exports.getJson = function (fname){
-	var deferred = Q.defer();
-	request({url: fname}, function (err, response, result) {
-		if (!err && response.statusCode == 200) {
-			deferred.resolve(result);
-		} else {
-			deferred.reject('getJson error: ',response.statusCode);
-		}
-	});
-	return deferred.promise;
-};
-
+/*
+	note: using prompt to get data from user
+	input: the filename of the schema holding the prompt data
+	return: an object holding the input values
+*/
 exports.getUserInput = function(schema){
 	var deferred = Q.defer();
 
@@ -72,14 +82,44 @@ exports.getUserInput = function(schema){
 	return deferred.promise;
 }
 
-exports.writeFile = function(html){
+/*
+	input: an array of
+		 the filenames to write,
+		and the content that goes in the files
+	output: an array of success messages - one  for each file written
+*/
+exports.writeManyFiles = function(data){
 	var deferred = Q.defer();
-	fname = 'test2.html';
-	FS.writeFile(fname, html, function (err) {
+
+	var builds = [];
+	var dir = 'views/';
+	for (var i = 0; i < data.length; i++) {
+		var fn = __dirname + '/' + data[i].filename;
+		builds.push(this.writeFile({ 'filename' : fn, 'html' : data[i].html }));
+	};
+
+	var bunchOPromises = Q.all(builds);
+
+	bunchOPromises
+	.then(function (results) {
+		deferred.resolve(results);
+	}).fail(function(e){
+		deferred.reject('buildManyFiles error: ', e);
+	});
+	return deferred.promise;
+};
+
+/*
+	input: filename of file to write, and the content that goes into it
+	data obj = { filename , html }
+*/
+exports.writeFile = function(data){
+	var deferred = Q.defer();
+	FS.writeFile(data.filename, data.html, function (err) {
 		if (err) {
 			deferred.reject('writeFile error: ' + err)
 		} else {
-			deferred.resolve('\r\n\r\nfile ' + fname + ' has been successfully written')
+			deferred.resolve('file ' + data.filename + ' has been successfully written')
 		}
 	});
 	return deferred.promise;
@@ -90,6 +130,10 @@ exports.exit = function(msg){
 	process.exit(code=0);
 }
 
+/*
+	input: name of file to read
+	output: file contents
+*/
 exports.readFile = function(fname){
 	var deferred = Q.defer();
 
@@ -102,3 +146,18 @@ exports.readFile = function(fname){
 	});
 	return deferred.promise;
 }
+
+/*
+	not currently in use
+*/
+exports.getJson = function (fname){
+	var deferred = Q.defer();
+	request({url: fname}, function (err, response, result) {
+		if (!err && response.statusCode == 200) {
+			deferred.resolve(result);
+		} else {
+			deferred.reject('getJson error: ',response.statusCode);
+		}
+	});
+	return deferred.promise;
+};
