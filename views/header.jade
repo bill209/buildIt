@@ -1,4 +1,12 @@
 head
-  title= appName
-  author= author
-  link(rel="stylesheet", href="style.css")
+	meta(charset="utf-8")
+	meta(http-equiv="X-UA-Compatible" content="IE=edge")
+	meta(name="viewport" content="width=device-width, initial-scale=1")
+	title- appName
+	author= author
+	link(rel="stylesheet" href="css/normalize.css")
+if bootstrap == 'y'
+	link(rel="stylesheet" href="js/libs/bootstrap-3.3.4/css/bootstrap.min.css")
+
+	link(rel="stylesheet" href="css/main.css")
+
