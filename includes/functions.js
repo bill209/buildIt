@@ -1,9 +1,8 @@
 var exports = module.exports = {};
 var Q = require('q');
-var prompt = require('prompt');
+var prompt = require('prompt');  // its use is deprecated
 var request = require("request");
 var FS = require('fs');
- var path = require('path');
 var jade = require('jade');
 
 /*
@@ -15,15 +14,14 @@ exports.buildManyFiles = function(values){
 
 	var builds = [];
 	var filesToBuild = [{ 'fname' : 'TEST.html', 'tplName' : 'test.jade'},{ 'fname' : 'TEST2.html', 'tplName' : 'test.jade'}];
-
-	var dir = 'views/';
+	var tplDir = 'views/';
 	for (var i = 0; i < filesToBuild.length; i++) {
 		/* call buildFile with:
 				the files to generate: ie  index.html, main.css...,
 				name of the template file: ie index.jade...,
 				and the user input values from prompt
 		*/
-		builds.push(this.buildFile( { 'filename' : filesToBuild[i].fname, 'tplName' : dir + filesToBuild[i].tplName, 'values' : values } ));
+		builds.push(this.buildFile( { 'filename' : values.appFolder + '/' + filesToBuild[i].fname, 'tplName' : tplDir + filesToBuild[i].tplName, 'values' : values } ));
 	};
 
 	var bunchOPromises = Q.all(builds);
@@ -33,7 +31,7 @@ exports.buildManyFiles = function(values){
 		// this contains an array of the
 		deferred.resolve(results);
 	}).fail(function(e){
-		deferred.reject('buildManyFiles error: ', e);
+		deferred.reject('buildManyFiles error: ' + e);
 	});
 	return deferred.promise;
 };
