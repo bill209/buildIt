@@ -21,9 +21,8 @@ exports.buildManyFiles = function(values){
 				name of the template file: ie index.jade...,
 				and the user input values from prompt
 		*/
-		builds.push(this.buildFile( { 'filename' : values.appFolder + '/' + filesToBuild[i].fname, 'tplName' : tplDir + filesToBuild[i].tplName, 'values' : values } ));
+		builds.push(this.buildFile( { 'filename' : values.rootFolder + '/' + filesToBuild[i].fname, 'tplName' : tplDir + filesToBuild[i].tplName, 'values' : values } ));
 	};
-
 	var bunchOPromises = Q.all(builds);
 
 	bunchOPromises
@@ -92,7 +91,7 @@ exports.writeManyFiles = function(data){
 	var builds = [];
 	var dir = 'views/';
 	for (var i = 0; i < data.length; i++) {
-		var fn = __dirname + '/' + data[i].filename;
+		var fn = data[i].filename;
 		builds.push(this.writeFile({ 'filename' : fn, 'html' : data[i].html }));
 	};
 
@@ -102,7 +101,7 @@ exports.writeManyFiles = function(data){
 	.then(function (results) {
 		deferred.resolve(results);
 	}).fail(function(e){
-		deferred.reject('buildManyFiles error: ', e);
+		deferred.reject('buildManyFiles error: ' + e);
 	});
 	return deferred.promise;
 };

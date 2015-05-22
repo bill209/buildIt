@@ -1,7 +1,6 @@
 var Q = require('q');
 var exports = module.exports = {};
 var readline = require('readline'),
-CURDIR = __dirname;
 
 rl = readline.createInterface(process.stdin, process.stdout);
 var answers = {};
@@ -13,8 +12,8 @@ exports.getUserInput = function(){
 	var deferred = Q.defer();
 
 	rl.question("name of your app (appology): ", function(answer) {
-		answers.appname = answer == "" ? 'appology' : answer;
-		var folderName = answers.appname.replace(" ", "_");
+		answers.appName = answer == "" ? 'appology' : answer;
+		var folderName = answers.appName.replace(" ", "_");
 		rl.question("your name (billbobb): ", function(answer) {
 			answers.author = answer == "" ? 'billbobb' : answer;
 			rl.question("app folder (" + folderName + "): ", function(answer) {

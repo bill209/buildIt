@@ -1,8 +1,8 @@
+CURDIR = __dirname;
+
 var input = require('./includes/input.js');
 var func = require('./includes/functions.js');
 var sbox = require('./includes/sandbox.js');
-CURDIR = __dirname;
-
 var schemaFile = 'schema.prompt';
 var tplDataUrl = 'http://localhost/repos/buildIt/tpl_data.json';
 results = {};
