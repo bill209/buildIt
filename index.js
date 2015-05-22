@@ -1,27 +1,30 @@
-var FS = require('fs');
-var Q = require('q');
+var input = require('./includes/input.js');
 var func = require('./includes/functions.js');
+var sbox = require('./includes/sandbox.js');
 CURDIR = __dirname;
 
-var schemaUrl = 'http://localhost/repos/buildIt/schema.prompt';
-var schemaFile = 'schema.json';
+var schemaFile = 'schema.prompt';
 var tplDataUrl = 'http://localhost/repos/buildIt/tpl_data.json';
+results = {};
 
-func.readFile(schemaFile)
+func.readFile(schemaFile)												// read the input schema - presently deprecated
 	.then(function(schema){
-		func.getUserInput(schema)
-		.then(function(results){
-			func.buildManyFiles(results)
-			.then(function(x){
- 				func.writeManyFiles(x)
- 				.then(function(msg){
-					console.log(msg);
- 					func.exit('finished\r\n');
- 				}).fail(function(e){console.log('1',e) });
- 			}).fail(function(e){ console.log('2',e) });
-
-		}).fail(function(e){ console.log('3',e) });
-	}).fail(function(e){ console.log('4',e) });
+		input.getUserInput()											// get user input from stdin
+		.then(function(x){
+			results = x;  // converting to global to pass down the line
+			sbox.processInput(results)									// process thie user input
+			.then(function(y){
+				func.buildManyFiles(results)							// create HTML from templates and schema
+				.then(function(z){
+	 				func.writeManyFiles(z)								// create files from the HTML
+	 				.then(function(msg){
+						console.log(msg);
+	 					func.exit('finished\r\n');						// all done  : )
+	 				}).fail(function(e){console.log('1',e) });
+	 			}).fail(function(e){ console.log('2',e) });
+			}).fail(function(e){ console.log('3',e) });
+		}).fail(function(e){ console.log('4',e) });
+	}).fail(function(e){ console.log('5',e) });
 
 
 /* files to build

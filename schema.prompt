@@ -18,4 +18,6 @@
 	name: 'rootFolder',
 	default: __dirname,
 	required: true
-}]
+}
+
+]
