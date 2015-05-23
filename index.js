@@ -14,17 +14,21 @@ func.readFile(schemaFile)												// read the input schema - presently deprec
 			results = x;  // converting to global to pass down the line
 			sbox.processInput(results)									// process thie user input
 			.then(function(y){
-				func.buildManyFiles(results)							// create HTML from templates and schema
-				.then(function(z){
-	 				func.writeManyFiles(z)								// create files from the HTML
-	 				.then(function(msg){
-						console.log(msg);
-	 					func.exit('finished\r\n');						// all done  : )
-	 				}).fail(function(e){console.log('1',e) });
-	 			}).fail(function(e){ console.log('2',e) });
-			}).fail(function(e){ console.log('3',e) });
-		}).fail(function(e){ console.log('4',e) });
-	}).fail(function(e){ console.log('5',e) });
+				func.copyBaseFiles(results)
+				.then(function(xx){
+console.log('xx',xx);
+					func.buildManyFiles(results)							// create HTML from templates and schema
+					.then(function(z){
+		 				func.writeManyFiles(z)								// create files from the HTML
+		 				.then(function(msg){
+							console.log(msg);
+		 					func.exit('finished\r\n');						// all done  : )
+		 				}).fail(function(e){console.log('1',e) });
+		 			}).fail(function(e){ console.log('2',e) });
+				}).fail(function(e){ console.log('3',e) });
+			}).fail(function(e){ console.log('44',e) });
+		}).fail(function(e){ console.log('5',e) });
+	}).fail(function(e){ console.log('6',e) });
 
 
 /* files to build

@@ -21,7 +21,6 @@ var createRootFolder = function(values){
 */
 exports.processInput = function(values){
 	var deferred = Q.defer();
-
 	var promiseArr = [];
 	promiseArr.push(createRootFolder(values));
 

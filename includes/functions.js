@@ -4,6 +4,49 @@ var prompt = require('prompt');  // its use is deprecated
 var request = require("request");
 var FS = require('fs');
 var jade = require('jade');
+var ncp = require('ncp').ncp;
+
+var copyBaseFileSet = function(fileSet){
+	var deferred = Q.defer();
+	var regx = new RegExp(/.*\.css/);
+//	ncp.errs = process.stdout;
+	options = { limit : 16, filter : regx };
+//	options = { limit : 16 };
+	ncp('views/baseFiles/', fileSet.toFolder, options, function (err) {
+		 if (err) {
+		 	deferred.reject({'function' : 'copyBaseFileSet', 'err' : err });
+		 } else {
+		 	deferred.resolve('copy successful');
+		 }
+	});
+		 	deferred.resolve('copy successful');
+	return deferred.promise;
+}
+
+exports.copyBaseFiles = function(values){
+	var deferred = Q.defer();
+	var p = [];
+	var fileSets = [
+		{ 'regex' : '.*\.css' , 'toFolder' : values.rootFolder + '/css'},
+		// { 'regex' : '.*\.jade' , 'toFolder' : values.rootFolder + '/jade'}
+	];
+	for (var i = fileSets.length - 1; i >= 0; i--) {
+		p.push(copyBaseFileSet(fileSets[i]));
+	};
+
+	var bunchOPromises = Q.all(p);
+	bunchOPromises
+	.then(function (results) {
+		// this contains an array of the
+		deferred.resolve(results);
+	}).fail(function(e){
+		deferred.reject('buildManyFiles error: ');
+	});
+	return deferred.promise;
+
+}
+
+
 
 /*
 	input:  user input from prompt
@@ -13,9 +56,28 @@ exports.buildManyFiles = function(values){
 	var deferred = Q.defer();
 
 	var builds = [];
-	var filesToBuild = [{ 'fname' : 'TEST.html', 'tplName' : 'test.jade'},{ 'fname' : 'TEST2.html', 'tplName' : 'test.jade'}];
+	var filesToBuild = [{ 'fname' : 'test.html', 'tplName' : 'test.jade'}];
 	var tplDir = 'views/';
 	for (var i = 0; i < filesToBuild.length; i++) {
+		switch(filesToBuild[i]) {
+		case 'main.css':
+				if(values.dataBinding == 'y'){
+					this.readFile('views/dataBinding.css.jade')
+					.then(function(data){
+						values.dataBindingData = data;
+					}).fail(function(e){
+						console.log('error reading template data: ' + e);
+					})
+				}
+				break;
+		case 'n':
+				console.log('ugh');
+				break;
+		default:
+			//console.log('default code block');
+		}
+
+
 		/* call buildFile with:
 				the files to generate: ie  index.html, main.css...,
 				name of the template file: ie index.jade...,
@@ -23,8 +85,8 @@ exports.buildManyFiles = function(values){
 		*/
 		builds.push(this.buildFile( { 'filename' : values.rootFolder + '/' + filesToBuild[i].fname, 'tplName' : tplDir + filesToBuild[i].tplName, 'values' : values } ));
 	};
-	var bunchOPromises = Q.all(builds);
 
+	var bunchOPromises = Q.all(builds);
 	bunchOPromises
 	.then(function (results) {
 		// this contains an array of the
@@ -59,6 +121,7 @@ exports.buildFile = function(data){
 }
 
 /*
+	note: deprecated
 	note: using prompt to get data from user
 	input: the filename of the schema holding the prompt data
 	return: an object holding the input values
