@@ -8,10 +8,9 @@ var ncp = require('ncp').ncp;
 
 var copyBaseFileSet = function(fileSet){
 	var deferred = Q.defer();
-	var regx = new RegExp(/.*\.css/);
+//	var regx = new RegExp(/.*\.css/);
 //	ncp.errs = process.stdout;
-	options = { limit : 16, filter : regx };
-//	options = { limit : 16 };
+	options = { limit : 16, filter : fileSet.regx };
 	ncp('views/baseFiles/', fileSet.toFolder, options, function (err) {
 		 if (err) {
 		 	deferred.reject({'function' : 'copyBaseFileSet', 'err' : err });
@@ -19,7 +18,6 @@ var copyBaseFileSet = function(fileSet){
 		 	deferred.resolve('copy successful');
 		 }
 	});
-		 	deferred.resolve('copy successful');
 	return deferred.promise;
 }
 
@@ -27,8 +25,7 @@ exports.copyBaseFiles = function(values){
 	var deferred = Q.defer();
 	var p = [];
 	var fileSets = [
-		{ 'regex' : '.*\.css' , 'toFolder' : values.rootFolder + '/css'},
-		// { 'regex' : '.*\.jade' , 'toFolder' : values.rootFolder + '/jade'}
+		{ 'regx' : RegExp(/.*\.css/) , 'toFolder' : values.rootFolder + '/css'}
 	];
 	for (var i = fileSets.length - 1; i >= 0; i--) {
 		p.push(copyBaseFileSet(fileSets[i]));
