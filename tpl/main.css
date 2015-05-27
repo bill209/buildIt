@@ -1,0 +1,15 @@
+html, body { height: 100%; }
+body {
+	color: #333;
+}
+
+{% if values.dataBinding == 'y' %}
+/* data-binding: heroes */
+#heroes {
+	padding-top: 20px;
+}
+#heroes li span {
+	display: inline-block;
+	width: 150px;
+}
+{% endif %}

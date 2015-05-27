@@ -9,8 +9,7 @@ var answers = {};
 	output: return an object with the value: answer pairs
 */
 exports.getUserInput = function(){
-	var deferred = Q.defer();
-
+ var deferred = Q.defer();
 	rl.question("name of your app (appology): ", function(answer) {
 		answers.appName = answer == "" ? 'appology' : answer;
 		var folderName = answers.appName.replace(" ", "_");
@@ -20,8 +19,18 @@ exports.getUserInput = function(){
 				answers.appFolder = answer == "" ? folderName : answer;		// not sure which of these two properties to use, so... create both
 				answers.rootFolder = CURDIR  + '/' + answers.appFolder;
 
-				deferred.resolve(answers);
-				rl.close();
+				rl.question("data binding (y): ", function(answer) {
+					answers.dataBinding = answer == "" ? 'y' : answer;
+
+					rl.question("include bootstrap (y): ", function(answer) {
+						answers.bootstrap = answer == "" ? 'y' : answer;
+
+
+
+										deferred.resolve(answers);
+										rl.close();
+					});
+				});
 			});
 		});
 	});

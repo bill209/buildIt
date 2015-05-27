@@ -1,6 +1,7 @@
 CURDIR = __dirname;
 
 var input = require('./includes/input.js');
+var tpl = require('./includes/tpl.js');
 var func = require('./includes/functions.js');
 var sbox = require('./includes/sandbox.js');
 var schemaFile = 'schema.prompt';
@@ -10,21 +11,24 @@ results = {};
 func.readFile(schemaFile)												// read the input schema - presently deprecated
 	.then(function(schema){
 		input.getUserInput()											// get user input from stdin
-		.then(function(x){
-			results = x;  // converting to global to pass down the line
+		.then(function(userInput){
+			results = userInput;  // converting to global to pass down the line
 			sbox.processInput(results)									// process thie user input
-			.then(function(y){
-				func.buildManyFiles(results)							// create HTML from templates and schema
-				.then(function(z){
-	 				func.writeManyFiles(z)								// create files from the HTML
-	 				.then(function(msg){
-						console.log(msg);
-	 					func.exit('finished\r\n');						// all done  : )
-	 				}).fail(function(e){console.log('1',e) });
-	 			}).fail(function(e){ console.log('2',e) });
-			}).fail(function(e){ console.log('3',e) });
-		}).fail(function(e){ console.log('4',e) });
-	}).fail(function(e){ console.log('5',e) });
+			.then(function(msg){
+				func.copyBaseFiles(results)
+				.then(function(msg){
+					tpl.buildManyFiles(results)							// create HTML from templates and schema
+					.then(function(tplData){
+		 				func.writeManyFiles(tplData)								// create files from the HTML
+		 				.then(function(msg){
+							console.log(msg);
+		 					func.exit('finished\r\n');						// all done  : )
+		 				}).fail(function(e){console.log('1',e) });
+		 			}).fail(function(e){ console.log('2',e) });
+				}).fail(function(e){ console.log('3',e) });
+			}).fail(function(e){ console.log('44',e) });
+		}).fail(function(e){ console.log('5',e) });
+	}).fail(function(e){ console.log('6',e) });
 
 
 /* files to build

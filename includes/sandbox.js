@@ -15,13 +15,14 @@ var createRootFolder = function(values){
 	return deferred.promise;
 }
 
-/*	deprecated for readline in input.js
+/*	
+	this function is where any necessary non-template processing 
+	takes place on the user's input, such as creating the root app folder
 	input:  user input from prompt
-	return filename, html
+	return filename, html (this can be a msg)
 */
 exports.processInput = function(values){
 	var deferred = Q.defer();
-
 	var promiseArr = [];
 	promiseArr.push(createRootFolder(values));
 
