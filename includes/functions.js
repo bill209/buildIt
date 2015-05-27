@@ -3,15 +3,22 @@ var Q = require('q');
 var prompt = require('prompt');  // its use is deprecated
 var request = require("request");
 var FS = require('fs');
-var jade = require('jade');
+var jade = require('jade');  // deprecated by swig
 var ncp = require('ncp').ncp;
 
+/*
+	this copies over all files of a certain type (eg css)
+	to a folder
+	input: regex for fileset, and destination folder
+	output: msg
+*/
 var copyBaseFileSet = function(fileSet){
+console.log('fileSet',fileSet);	
 	var deferred = Q.defer();
 //	var regx = new RegExp(/.*\.css/);
 //	ncp.errs = process.stdout;
 	options = { limit : 16, filter : fileSet.regx };
-	ncp('views/baseFiles/', fileSet.toFolder, options, function (err) {
+	ncp('baseFiles/' + fileSet.fromFolder, fileSet.toFolder, options, function (err) {
 		 if (err) {
 		 	deferred.reject({'function' : 'copyBaseFileSet', 'err' : err });
 		 } else {
@@ -20,12 +27,21 @@ var copyBaseFileSet = function(fileSet){
 	});
 	return deferred.promise;
 }
-
+/*
+	this function is used to copy all of the files that
+	do not require any templating
+	input:  app root folder location
+	calls: copyBaseFileSet
+	output: array of messages from copyBaseFileSet
+*/
 exports.copyBaseFiles = function(values){
 	var deferred = Q.defer();
 	var p = [];
 	var fileSets = [
-		{ 'regx' : RegExp(/.*\.css/) , 'toFolder' : values.rootFolder + '/css'}
+		{ 'regx' : RegExp(/.*\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
+//		{ 'regx' : RegExp(/^((?!\.css).)*$/), 'fromFolder' : 'js', 'toFolder' : values.rootFolder + '/'}  // exclude regex
+		{  'fromFolder' : 'js', 'toFolder' : values.rootFolder + '/js'},
+		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'}
 	];
 	for (var i = fileSets.length - 1; i >= 0; i--) {
 		p.push(copyBaseFileSet(fileSets[i]));
@@ -34,18 +50,17 @@ exports.copyBaseFiles = function(values){
 	var bunchOPromises = Q.all(p);
 	bunchOPromises
 	.then(function (results) {
-		// this contains an array of the
+		// this contains an array of the success messages from copyBaseFileSet
 		deferred.resolve(results);
 	}).fail(function(e){
-		deferred.reject('buildManyFiles error: ');
+console.log('e',e);
+		deferred.reject('copyBaseFiles error: ' + e);
 	});
 	return deferred.promise;
-
 }
 
-
-
 /*
+	NOTE: (jade) DEPRECATED by SWIG
 	input:  user input from prompt
 	return filename, html
 */
@@ -54,12 +69,12 @@ exports.buildManyFiles = function(values){
 
 	var builds = [];
 	var filesToBuild = [{ 'fname' : 'test.html', 'tplName' : 'test.jade'}];
-	var tplDir = 'views/';
+	var tplDir = 'tpl/';
 	for (var i = 0; i < filesToBuild.length; i++) {
 		switch(filesToBuild[i]) {
 		case 'main.css':
 				if(values.dataBinding == 'y'){
-					this.readFile('views/dataBinding.css.jade')
+					this.readFile('tpl/dataBinding.css.jade')
 					.then(function(data){
 						values.dataBindingData = data;
 					}).fail(function(e){
@@ -73,8 +88,6 @@ exports.buildManyFiles = function(values){
 		default:
 			//console.log('default code block');
 		}
-
-
 		/* call buildFile with:
 				the files to generate: ie  index.html, main.css...,
 				name of the template file: ie index.jade...,
@@ -89,12 +102,13 @@ exports.buildManyFiles = function(values){
 		// this contains an array of the
 		deferred.resolve(results);
 	}).fail(function(e){
-		deferred.reject('buildManyFiles error: ' + e);
+		deferred.reject('buildManyFiles error - jade: ' + e);
 	});
 	return deferred.promise;
 };
 
 /*
+	NOTE: DEPRECATED by SWIG
 	input:
 		files to generate, name of the template file, user input values
 	return:
@@ -118,7 +132,7 @@ exports.buildFile = function(data){
 }
 
 /*
-	note: deprecated
+	NOTE: DEPRECATED BY READLINE
 	note: using prompt to get data from user
 	input: the filename of the schema holding the prompt data
 	return: an object holding the input values
@@ -149,7 +163,7 @@ exports.writeManyFiles = function(data){
 	var deferred = Q.defer();
 
 	var builds = [];
-	var dir = 'views/';
+	var dir = 'tpl/';
 	for (var i = 0; i < data.length; i++) {
 		var fn = data[i].filename;
 		builds.push(this.writeFile({ 'filename' : fn, 'html' : data[i].html }));
@@ -161,7 +175,7 @@ exports.writeManyFiles = function(data){
 	.then(function (results) {
 		deferred.resolve(results);
 	}).fail(function(e){
-		deferred.reject('buildManyFiles error: ' + e);
+		deferred.reject('writeManyFiles error: ' + e);
 	});
 	return deferred.promise;
 };
