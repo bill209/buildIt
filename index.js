@@ -8,12 +8,12 @@ var schemaFile = 'schema.prompt';
 var tplDataUrl = 'http://localhost/repos/buildIt/tpl_data.json';
 results = {};
 
-func.readFile(schemaFile)												// read the input schema - presently deprecated
-	.then(function(schema){
+// func.readFile(schemaFile)												// read the input schema - presently deprecated
+// 	.then(function(schema){
 		input.getUserInput()											// get user input from stdin
 		.then(function(userInput){
 			results = userInput;  // converting to global to pass down the line
-			sbox.processInput(results)									// process thie user input
+			sbox.processInput(results)									// process the user input
 			.then(function(msg){
 				func.copyBaseFiles(results)
 				.then(function(msg){
@@ -28,7 +28,7 @@ func.readFile(schemaFile)												// read the input schema - presently deprec
 				}).fail(function(e){ console.log('3',e) });
 			}).fail(function(e){ console.log('44',e) });
 		}).fail(function(e){ console.log('5',e) });
-	}).fail(function(e){ console.log('6',e) });
+//	}).fail(function(e){ console.log('6',e) });
 
 
 /* files to build

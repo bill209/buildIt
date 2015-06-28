@@ -1,5 +1,5 @@
 [{
-	description: "name of the app",
+	description: "name of the appz",
 	name: 'appName',
 	default: 'appster',
 	required: true

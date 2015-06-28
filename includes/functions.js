@@ -1,6 +1,6 @@
 var exports = module.exports = {};
 var Q = require('q');
-var prompt = require('prompt');  // its use is deprecated
+var prompt = require('prompt');  //  deprecated by readline
 var request = require("request");
 var FS = require('fs');
 var jade = require('jade');  // deprecated by swig
@@ -13,11 +13,10 @@ var ncp = require('ncp').ncp;
 	output: msg
 */
 var copyBaseFileSet = function(fileSet){
-console.log('fileSet',fileSet);	
 	var deferred = Q.defer();
 //	var regx = new RegExp(/.*\.css/);
 //	ncp.errs = process.stdout;
-	options = { limit : 16, filter : fileSet.regx };
+	options = { limit : 32, filter : fileSet.regx };
 	ncp('baseFiles/' + fileSet.fromFolder, fileSet.toFolder, options, function (err) {
 		 if (err) {
 		 	deferred.reject({'function' : 'copyBaseFileSet', 'err' : err });
@@ -27,6 +26,7 @@ console.log('fileSet',fileSet);
 	});
 	return deferred.promise;
 }
+
 /*
 	this function is used to copy all of the files that
 	do not require any templating
@@ -37,12 +37,9 @@ console.log('fileSet',fileSet);
 exports.copyBaseFiles = function(values){
 	var deferred = Q.defer();
 	var p = [];
-	var fileSets = [
-		{ 'regx' : RegExp(/.*\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
-//		{ 'regx' : RegExp(/^((?!\.css).)*$/), 'fromFolder' : 'js', 'toFolder' : values.rootFolder + '/'}  // exclude regex
-		{  'fromFolder' : 'js', 'toFolder' : values.rootFolder + '/js'},
-		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'}
-	];
+
+	var fileSets = prepareFileSet(values);
+
 	for (var i = fileSets.length - 1; i >= 0; i--) {
 		p.push(copyBaseFileSet(fileSets[i]));
 	};
@@ -54,9 +51,38 @@ exports.copyBaseFiles = function(values){
 		deferred.resolve(results);
 	}).fail(function(e){
 console.log('e',e);
-		deferred.reject('copyBaseFiles error: ' + e);
+console.log(e);
+		deferred.reject('copyBaseFiles error: ', e);
 	});
 	return deferred.promise;
+}
+
+function prepareFileSet(values){
+	var deferred = Q.defer();
+	var p = [];
+	var fileSets = [
+		{ 'regx' : RegExp(/normalize\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
+//		{ 'regx' : RegExp(/.*\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
+		{ 'regx' : RegExp(/main\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'}
+	];
+
+	if(values.restCalls == 'y'){
+		fileSets.push({'fromFolder' : 'css/restcalls', 'toFolder' : values.rootFolder + '/css/restcalls'});
+		fileSets.push({ 'regx' : RegExp(/colors\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'})
+		fileSets.push({ 'regx' : RegExp(/icons\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'})
+	}
+	if(values.dataBinding == 'y'){
+		fileSets.push({ 'regx' : RegExp(/heroes\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'})
+	}
+
+	return fileSets;
+}
+
+
+exports.copyBaseFiles_XXX = function(values){
+	filesToCopy = prepareFileSet(values);
+	recursiveReadFiles(0);
 }
 
 /*

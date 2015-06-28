@@ -1,0 +1,12 @@
+[
+	{"name": "Batman", "publisher": "DC Comics"},
+	{"name": "Green Lantern", "publisher": "DC Comics"},
+	{"name": "Cat Woman", "publisher": "DC Comics"},
+	{"name": "Hawkman", "publisher": "DC Comics"},
+	{"name": "Bizarro", "publisher": "DC Comics"},
+	{"name": "Iron Man", "publisher": "Marvel"},
+	{"name": "Captain America", "publisher": "Marvel"},
+	{"name": "Hulk", "publisher": "Marvel"},
+	{"name": "Spiderman", "publisher": "Marvel"},
+	{"name": "Storm", "publisher": "Marvel"}
+]
