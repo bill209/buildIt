@@ -3,8 +3,9 @@ var Q = require('q');
 var prompt = require('prompt');  //  deprecated by readline
 var request = require("request");
 var FS = require('fs');
-var jade = require('jade');  // deprecated by swig
 var ncp = require('ncp').ncp;
+var async = require('async');
+var mkdirp = require('mkdirp');
 
 /*
 	this copies over all files of a certain type (eg css)
@@ -12,19 +13,21 @@ var ncp = require('ncp').ncp;
 	input: regex for fileset, and destination folder
 	output: msg
 */
-var copyBaseFileSet = function(fileSet){
-	var deferred = Q.defer();
-//	var regx = new RegExp(/.*\.css/);
-//	ncp.errs = process.stdout;
-	options = { limit : 32, filter : fileSet.regx };
-	ncp('baseFiles/' + fileSet.fromFolder, fileSet.toFolder, options, function (err) {
-		 if (err) {
-		 	deferred.reject({'function' : 'copyBaseFileSet', 'err' : err });
-		 } else {
-		 	deferred.resolve('copy successful');
-		 }
-	});
-	return deferred.promise;
+function copyBaseFileSet(fileSet){
+console.log('*** fileSet',fileSet);
+	return function(callback){
+		options = { limit : 32, filter : fileSet.regx };
+		ncp('baseFiles/' + fileSet.fromFolder, fileSet.toFolder, options, function (err) {
+// 			 if (err) {
+// console.log('ERROR',err);
+// console.log('fileSet.toFolder',fileSet.toFolder);
+// 				callback(err,'copyBaseFileSet error');
+// 			 } else {
+// console.log('SUCCESS:  ', fileSet);
+				callback(null,'successful copyBaseFileSet: ' + fileSet);
+//			 }
+		});
+	}
 }
 
 /*
@@ -34,6 +37,7 @@ var copyBaseFileSet = function(fileSet){
 	calls: copyBaseFileSet
 	output: array of messages from copyBaseFileSet
 */
+
 exports.copyBaseFiles = function(values){
 	var deferred = Q.defer();
 	var p = [];
@@ -44,15 +48,13 @@ exports.copyBaseFiles = function(values){
 		p.push(copyBaseFileSet(fileSets[i]));
 	};
 
-	var bunchOPromises = Q.all(p);
-	bunchOPromises
-	.then(function (results) {
-		// this contains an array of the success messages from copyBaseFileSet
-		deferred.resolve(results);
-	}).fail(function(e){
-console.log('e',e);
-console.log(e);
-		deferred.reject('copyBaseFiles error: ', e);
+	async.series(p,function(err, results){
+		if(err){
+			// add: pass error back upstream
+			console.log('err',err);
+		} else {
+			deferred.resolve(results);
+		}
 	});
 	return deferred.promise;
 }
@@ -77,84 +79,6 @@ function prepareFileSet(values){
 	}
 
 	return fileSets;
-}
-
-
-exports.copyBaseFiles_XXX = function(values){
-	filesToCopy = prepareFileSet(values);
-	recursiveReadFiles(0);
-}
-
-/*
-	NOTE: (jade) DEPRECATED by SWIG
-	input:  user input from prompt
-	return filename, html
-*/
-exports.buildManyFiles = function(values){
-	var deferred = Q.defer();
-
-	var builds = [];
-	var filesToBuild = [{ 'fname' : 'test.html', 'tplName' : 'test.jade'}];
-	var tplDir = 'tpl/';
-	for (var i = 0; i < filesToBuild.length; i++) {
-		switch(filesToBuild[i]) {
-		case 'main.css':
-				if(values.dataBinding == 'y'){
-					this.readFile('tpl/dataBinding.css.jade')
-					.then(function(data){
-						values.dataBindingData = data;
-					}).fail(function(e){
-						console.log('error reading template data: ' + e);
-					})
-				}
-				break;
-		case 'n':
-				console.log('ugh');
-				break;
-		default:
-			//console.log('default code block');
-		}
-		/* call buildFile with:
-				the files to generate: ie  index.html, main.css...,
-				name of the template file: ie index.jade...,
-				and the user input values from prompt
-		*/
-		builds.push(this.buildFile( { 'filename' : values.rootFolder + '/' + filesToBuild[i].fname, 'tplName' : tplDir + filesToBuild[i].tplName, 'values' : values } ));
-	};
-
-	var bunchOPromises = Q.all(builds);
-	bunchOPromises
-	.then(function (results) {
-		// this contains an array of the
-		deferred.resolve(results);
-	}).fail(function(e){
-		deferred.reject('buildManyFiles error - jade: ' + e);
-	});
-	return deferred.promise;
-};
-
-/*
-	NOTE: DEPRECATED by SWIG
-	input:
-		files to generate, name of the template file, user input values
-	return:
-		name of files to generate,
-		and the content that will go inside those files
-*/
-exports.buildFile = function(data){
-	var deferred = Q.defer();
-	FS.readFile(data.tplName, 'utf8', function (err, tplFile) {
-		if (err){
-			deferred.reject('buildFile error: ' + err);
-		} else {
-			var fn = CURDIR + '/' + data.tplName;
-			var options = { 'filename': fn, 'pretty': '\t'}
-			var fn = jade.compile(tplFile, options);
-			var html = fn(data.values);
-			deferred.resolve({ 'html' : html, 'filename' : data.filename});
-		}
-	});
-	return deferred.promise;
 }
 
 /*
@@ -212,13 +136,34 @@ exports.writeManyFiles = function(data){
 */
 exports.writeFile = function(data){
 	var deferred = Q.defer();
-	FS.writeFile(data.filename, data.html, function (err) {
+
+	createPath(data.filename)
+		.then(function(res){
+			FS.writeFile(data.filename, data.html, function (err,r) {
+				if (err) {
+					deferred.reject('writeFile error: ' + err)
+				} else {
+					deferred.resolve('file ' + data.filename + ' has been successfully written')
+				}
+			});
+		})
+	return deferred.promise;
+}
+
+function createPath(fname){
+	var deferred = Q.defer();
+
+	// remove filename off the end of the path/filename string
+	var dir = fname.substring(0,fname.lastIndexOf('/'));
+
+	mkdirp(dir, function (err) {
 		if (err) {
-			deferred.reject('writeFile error: ' + err)
+			console.log('createPath error:', err);
 		} else {
-			deferred.resolve('file ' + data.filename + ' has been successfully written')
+			deferred.resolve('yep');
 		}
 	});
+
 	return deferred.promise;
 }
 
