@@ -13,6 +13,7 @@ results = {};
 		input.getUserInput()											// get user input from stdin
 		.then(function(userInput){
 			results = userInput;  // converting to global to pass down the line
+			console.log('results',results);
 			sbox.processInput(results)									// process the user input
 			.then(function(msg){
 				func.copyBaseFiles(results)

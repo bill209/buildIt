@@ -13,14 +13,14 @@ body {
 }
 
 #footer {
-	height: 100px;
 	background-color: #f5f5f5;
 	padding: 40px 20px 20px 20px;
 	color: #ddd;
 }
 
-/* --------------------------- routing  section --------------------------- */
+/* --------------------------- routing/nav  section --------------------------- */
 
+{% if bootstrap %}
 /* this lightens the nav items on the dark background of the about page */
 ul.navbar-right li a.hiliteNav:hover { color: #ddd; }
 
@@ -36,6 +36,20 @@ div.navbar-header.hiliteNav {
 	color: #ddd;
 }
 
+{% else %}
+.hiliteNav:hover { color: #fff; }
+
+.hiliteNav {
+color: #ddd;
+  position: relative;
+  z-index: 9;
+}
+
+ul.navbar li {
+	display: inline-block;
+	cursor: pointer;
+}
+{% endif %}
 /* --------------------------- about page --------------------------- */
 #about {
 	position: absolute;

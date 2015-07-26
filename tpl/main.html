@@ -1,7 +1,7 @@
 
 	<div  ng-controller='MainCtrl as mainCtrl'>
 		<div class="jumbotron">
-			<h1>Angular Template v0.1</h1>
+			<h1>Angular Template v0.2</h1>
 			<p class="lead">This angular app template was created by the node app buildIt v0.1.</p>
 			<div class="accordion vertical">
 				<section id='readme'>
@@ -22,23 +22,32 @@
 
 				<ul class="list-group">
 					<li class="list-group-item">angular.js</li>
+					{% if values.bootstrap == 'y' %}
 					<li class="list-group-item">bootstrap</li>
+					{% endif %}
+					{% if values.firebase == 'y' %}
 					<li class="list-group-item">firebase</li>
+					{% endif %}
+					{% if values.fontawesome == 'y' %}
 					<li class="list-group-item">font awesome</li>
+					{% endif %}
 				</ul>
-
+				{% if values.directives == 'y' %}
 				<h3>Directive: clock</h3>
 				<clock format="HH:mm:ss"></clock>
 				<h3>Directive: name</h3>
 				<div my-customer></div>
-
+				{% endif %}
+				{% if values.filter == 'y' %}
 				<h3>Filter: limit chars</h3>
 				{% raw %} <p> {{mainCtrl.gettysburg | cut:true:100:' ...'}}</p>{% endraw %}
+				{% endif %}
 
 			</div>
 
 			<div class="col-sm-6 col-md-6 col-lg-6">
 
+				{% if values.databinding == 'y' %}
 				<h3>Data Binding: super heroes</h3>
 				<div class='well'>
 					Sort by:
@@ -49,14 +58,15 @@
 
 					<ul id='heroes' class="list-unstyled">
 						<li ng-repeat="hero in heroes | filter:query | orderBy:mainCtrl.orderProp">
-{% raw %}
+							{% raw %}
 							<span>{{hero.name}}</span>
 							<span>{{hero.publisher}}</span>
-{% endraw %}
+							{% endraw %}
 						</li>
 					</ul>
 				</div>
-
+				{% endif %}
+				{% if values.firebase == 'y' %}
 				<h3>Firebase: thoughts</h3>
 				<div  id='firebase' class='well' ng-controller='FirebaseCtrl as fbCtrl' ng-init='fbCtrl.checkIfRecordsExists()'>
 					<h4>submit a thought</h4>
@@ -68,15 +78,15 @@
 					<ul ng-show="fbCtrl.thoughts.length > 0">
 						<li 	ng-repeat='(k, thought) in fbCtrl.thoughts'
 							ng-class="{'boldDelete' : fbCtrl.hoverDelete == $index}">{% raw %}{{thought.pondering}}{% endraw %}
-								<span class='delete'
-									ng-click='fbCtrl.thoughts.$remove(k);fbCtrl.hoverDelete = -1;'
-									ng-mouseover="fbCtrl.hoverDelete = $index"
-									ng-mouseleave="fbCtrl.hoverDelete = -1">x
-								</span>
+							<span class='delete'
+								ng-click='fbCtrl.thoughts.$remove(k);fbCtrl.hoverDelete = -1;'
+								ng-mouseover="fbCtrl.hoverDelete = $index"
+								ng-mouseleave="fbCtrl.hoverDelete = -1">x
+							</span>
 						</li>
 					</ul>
 				</div>
-
+				{% endif %}
 			</div>
 		</div>
 		<div class='row footnotes' ng-class="{'readmeContent_show': mainCtrl.readMe == true}">

@@ -25,7 +25,8 @@
 <body ng-app="Appology" ng-controller='BodyCtrl as bodyCtrl' ng-style='bodyCtrl.bodyBgColor'>
 	<div class='container'>
 
-		<!-- navbar -->
+{% if values.bootstrap == 'y' %}
+		<!-- navbar - bootstrap -->
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<!-- Brand and toggle get grouped for better mobile display -->
@@ -43,15 +44,31 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-right">
 						<li ng-class="{ active: bodyCtrl.isActive('/about')}"><a href="#/about">About</a></li>
+						{% if values.restCalls == 'y' %}
 						<li ng-class="{ active: bodyCtrl.isActive('/restCalls')}"><a ng-class="{ hiliteNav: bodyCtrl.isAbout() }" href="#/restCalls">Rest Calls</a></li>
+						{% endif %}
+						{% if values.fontawesome == 'y' %}
 						<li ng-class="{ active: bodyCtrl.isActive('/colors')}"><a ng-class="{ hiliteNav: bodyCtrl.isAbout() }" href="#/colors">Colors</a></li>
+						{% endif %}
 						<li ng-class="{ active: bodyCtrl.isActive('/test')}"><a ng-class="{ hiliteNav: bodyCtrl.isAbout() }" href="#/test">Test</a></li>
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
 		</nav>
 		<!-- end navbar -->
-
+{% else %}
+		<!-- navbar - non-bootstrap -->
+		<ul class="navbar">
+			<li ng-class="{ active: bodyCtrl.isActive('/main')}"><a ng-class="{ hiliteNav: bodyCtrl.isAbout() }" href="#/main">Home</a></li>
+			<li ng-class="{ active: bodyCtrl.isActive('/about')}"><a ng-class="{ hiliteNav: bodyCtrl.isAbout() }" href="#/about">About</a></li>
+			{% if values.restCalls == 'y' %}
+			<li ng-class="{ active: bodyCtrl.isActive('/restCalls')}"><a ng-class="{ hiliteNav: bodyCtrl.isAbout() }" href="#/restCalls">REST Calls</a></li>
+			{% endif %}
+			{% if values.fontawesome == 'y' %}
+			<li ng-class="{ active: bodyCtrl.isActive('/colors')}"><a ng-class="{ hiliteNav: bodyCtrl.isAbout() }" href="#/colors">Colors</a></li>
+			{% endif %}
+		</ul>
+{% endif %}
 		<div ng-view></div>
 
 		<div id='footer' class="footer">
