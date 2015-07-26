@@ -1,10 +1,11 @@
 var exports = module.exports = {};
 var Q = require('q');
-var prompt = require('prompt');  // its use is deprecated
+var prompt = require('prompt');  //  deprecated by readline
 var request = require("request");
 var FS = require('fs');
-var jade = require('jade');  // deprecated by swig
 var ncp = require('ncp').ncp;
+var async = require('async');
+var mkdirp = require('mkdirp');
 
 /*
 	this copies over all files of a certain type (eg css)
@@ -12,21 +13,24 @@ var ncp = require('ncp').ncp;
 	input: regex for fileset, and destination folder
 	output: msg
 */
-var copyBaseFileSet = function(fileSet){
-console.log('fileSet',fileSet);	
-	var deferred = Q.defer();
-//	var regx = new RegExp(/.*\.css/);
-//	ncp.errs = process.stdout;
-	options = { limit : 16, filter : fileSet.regx };
-	ncp('baseFiles/' + fileSet.fromFolder, fileSet.toFolder, options, function (err) {
-		 if (err) {
-		 	deferred.reject({'function' : 'copyBaseFileSet', 'err' : err });
-		 } else {
-		 	deferred.resolve('copy successful');
-		 }
-	});
-	return deferred.promise;
+function copyBaseFileSet(fileSet){
+	return function(callback){
+		options = { limit : 32, filter : fileSet.regx };
+		createPath(fileSet.toFolder)
+			.then(function(res){
+				ncp('baseFiles/' + fileSet.fromFolder, fileSet.toFolder, options, function (err) {
+					var res = null;
+					 if (err) {
+						console.log('+++ copyBaseFileSet error/r/n', err);
+						res = err;
+					 }
+					callback(res,'successful copyBaseFileSet: ' + fileSet);
+				});
+
+			})
+	}
 }
+
 /*
 	this function is used to copy all of the files that
 	do not require any templating
@@ -34,101 +38,56 @@ console.log('fileSet',fileSet);
 	calls: copyBaseFileSet
 	output: array of messages from copyBaseFileSet
 */
+
 exports.copyBaseFiles = function(values){
 	var deferred = Q.defer();
 	var p = [];
-	var fileSets = [
-		{ 'regx' : RegExp(/.*\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
-//		{ 'regx' : RegExp(/^((?!\.css).)*$/), 'fromFolder' : 'js', 'toFolder' : values.rootFolder + '/'}  // exclude regex
-		{  'fromFolder' : 'js', 'toFolder' : values.rootFolder + '/js'},
-		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'}
-	];
+
+	var fileSets = prepareFileSet(values);
+
 	for (var i = fileSets.length - 1; i >= 0; i--) {
 		p.push(copyBaseFileSet(fileSets[i]));
 	};
 
-	var bunchOPromises = Q.all(p);
-	bunchOPromises
-	.then(function (results) {
-		// this contains an array of the success messages from copyBaseFileSet
-		deferred.resolve(results);
-	}).fail(function(e){
-console.log('e',e);
-		deferred.reject('copyBaseFiles error: ' + e);
+	async.series(p,function(err, results){
+		if(err){
+			// add: pass error back upstream
+			console.log('err: ' + results,err);
+		} else {
+			deferred.resolve(results);
+		}
 	});
 	return deferred.promise;
 }
 
-/*
-	NOTE: (jade) DEPRECATED by SWIG
-	input:  user input from prompt
-	return filename, html
-*/
-exports.buildManyFiles = function(values){
+function prepareFileSet(values){
 	var deferred = Q.defer();
+	var p = [];
+	var fileSets = [
+		{ 'regx' : RegExp(/normalize\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
+//		{ 'regx' : RegExp(/.*\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
+		{ 'regx' : RegExp(/main\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+		{ 'regx' : RegExp(/svc\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+		{ 'regx' : RegExp(/controllers\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+		{ 'regx' : RegExp(/filters\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'},
+		{  'fromFolder' : 'js/directives', 'toFolder' : values.rootFolder + '/js/directives'}
+	];
 
-	var builds = [];
-	var filesToBuild = [{ 'fname' : 'test.html', 'tplName' : 'test.jade'}];
-	var tplDir = 'tpl/';
-	for (var i = 0; i < filesToBuild.length; i++) {
-		switch(filesToBuild[i]) {
-		case 'main.css':
-				if(values.dataBinding == 'y'){
-					this.readFile('tpl/dataBinding.css.jade')
-					.then(function(data){
-						values.dataBindingData = data;
-					}).fail(function(e){
-						console.log('error reading template data: ' + e);
-					})
-				}
-				break;
-		case 'n':
-				console.log('ugh');
-				break;
-		default:
-			//console.log('default code block');
-		}
-		/* call buildFile with:
-				the files to generate: ie  index.html, main.css...,
-				name of the template file: ie index.jade...,
-				and the user input values from prompt
-		*/
-		builds.push(this.buildFile( { 'filename' : values.rootFolder + '/' + filesToBuild[i].fname, 'tplName' : tplDir + filesToBuild[i].tplName, 'values' : values } ));
-	};
+	if(values.restCalls == 'y'){
+		fileSets.push({ 'regx' : RegExp(/flip\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'});
+//		fileSets.push({'fromFolder' : 'css/', 'toFolder' : values.rootFolder + '/css'});
+		fileSets.push({ 'regx' : RegExp(/colors\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'});
+		fileSets.push({ 'regx' : RegExp(/icons\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'});
+	}
+	if(values.dataBinding == 'y'){
+		fileSets.push({ 'regx' : RegExp(/heroes\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'})
+	}
+	if(values.fontawesome == 'y'){
+		fileSets.push({ 'regx' : RegExp(/tile\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'})
+	}
 
-	var bunchOPromises = Q.all(builds);
-	bunchOPromises
-	.then(function (results) {
-		// this contains an array of the
-		deferred.resolve(results);
-	}).fail(function(e){
-		deferred.reject('buildManyFiles error - jade: ' + e);
-	});
-	return deferred.promise;
-};
-
-/*
-	NOTE: DEPRECATED by SWIG
-	input:
-		files to generate, name of the template file, user input values
-	return:
-		name of files to generate,
-		and the content that will go inside those files
-*/
-exports.buildFile = function(data){
-	var deferred = Q.defer();
-	FS.readFile(data.tplName, 'utf8', function (err, tplFile) {
-		if (err){
-			deferred.reject('buildFile error: ' + err);
-		} else {
-			var fn = CURDIR + '/' + data.tplName;
-			var options = { 'filename': fn, 'pretty': '\t'}
-			var fn = jade.compile(tplFile, options);
-			var html = fn(data.values);
-			deferred.resolve({ 'html' : html, 'filename' : data.filename});
-		}
-	});
-	return deferred.promise;
+	return fileSets;
 }
 
 /*
@@ -186,13 +145,39 @@ exports.writeManyFiles = function(data){
 */
 exports.writeFile = function(data){
 	var deferred = Q.defer();
-	FS.writeFile(data.filename, data.html, function (err) {
+
+	createPath(data.filename)
+		.then(function(res){
+			FS.writeFile(data.filename, data.html, function (err,r) {
+				if (err) {
+					deferred.reject('writeFile error: ' + err)
+				} else {
+					deferred.resolve('file ' + data.filename + ' has been successfully written')
+				}
+			});
+		})
+	return deferred.promise;
+}
+
+function createPath(fname){
+	var deferred = Q.defer();
+
+	// remove filename off the end of the path/filename string
+	// existence of filename dependent on finding a '.' after the last '/'
+	if(fname.substring(fname.lastIndexOf('/')).indexOf('.') != -1){
+		var dir = fname.substring(0,fname.lastIndexOf('/'));
+	} else {
+		var dir = fname;
+	}
+
+	mkdirp(dir, function (err) {
 		if (err) {
-			deferred.reject('writeFile error: ' + err)
+			console.log('createPath error:', err);
 		} else {
-			deferred.resolve('file ' + data.filename + ' has been successfully written')
+			deferred.resolve('createPath successfule');
 		}
 	});
+
 	return deferred.promise;
 }
 

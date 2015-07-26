@@ -1,0 +1,21 @@
+<!-- blocks of colors borrowed from: http://talkslab.github.io/metro-bootstrap/components.html -->
+<div id='colors' class='row' ng-controller="colorsCtrl">
+	<div class='col-md-12'>
+		<h1 class='fontAwesome'>font awesome</h1>
+		<h3 id="thumbnails-default">w/ Colors</h3>
+		<div class="bs-example">
+			<div class="row">
+
+				<div ng-repeat='icon in icons' class="col-sm-3 col-md-2">
+					<div class="thumbnail tile tile-medium tile-{{icon.color}} col-md-2">
+						<a href="http://fortawesome.github.io/Font-Awesome/icon/{{icon.faName}}/">
+							<h2>{{icon.color}}</h2>
+							<i class="fa fa-3x fa-{{icon.faName}}"></i>
+						</a>
+					</div>
+				</div>
+
+			</div> 
+		</div>
+	</div> 
+</div>
