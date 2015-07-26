@@ -21,7 +21,6 @@ results = {};
 					.then(function(tplData){
 		 				func.writeManyFiles(tplData)								// create files from the HTML
 		 				.then(function(msg){
-							console.log(msg);
 		 					func.exit('finished\r\n');						// all done  : )
 		 				}).fail(function(e){console.log('1',e) });
 		 			}).fail(function(e){ console.log('2',e) });

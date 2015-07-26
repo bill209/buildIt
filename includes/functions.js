@@ -14,19 +14,20 @@ var mkdirp = require('mkdirp');
 	output: msg
 */
 function copyBaseFileSet(fileSet){
-console.log('*** fileSet',fileSet);
 	return function(callback){
 		options = { limit : 32, filter : fileSet.regx };
-		ncp('baseFiles/' + fileSet.fromFolder, fileSet.toFolder, options, function (err) {
-// 			 if (err) {
-// console.log('ERROR',err);
-// console.log('fileSet.toFolder',fileSet.toFolder);
-// 				callback(err,'copyBaseFileSet error');
-// 			 } else {
-// console.log('SUCCESS:  ', fileSet);
-				callback(null,'successful copyBaseFileSet: ' + fileSet);
-//			 }
-		});
+		createPath(fileSet.toFolder)
+			.then(function(res){
+				ncp('baseFiles/' + fileSet.fromFolder, fileSet.toFolder, options, function (err) {
+					var res = null;
+					 if (err) {
+						console.log('+++ copyBaseFileSet error/r/n', err);
+						res = err;
+					 }
+					callback(res,'successful copyBaseFileSet: ' + fileSet);
+				});
+
+			})
 	}
 }
 
@@ -51,7 +52,7 @@ exports.copyBaseFiles = function(values){
 	async.series(p,function(err, results){
 		if(err){
 			// add: pass error back upstream
-			console.log('err',err);
+			console.log('err: ' + results,err);
 		} else {
 			deferred.resolve(results);
 		}
@@ -66,16 +67,24 @@ function prepareFileSet(values){
 		{ 'regx' : RegExp(/normalize\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
 //		{ 'regx' : RegExp(/.*\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
 		{ 'regx' : RegExp(/main\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
-		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'}
+		{ 'regx' : RegExp(/svc\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+		{ 'regx' : RegExp(/controllers\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+		{ 'regx' : RegExp(/filters\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'},
+		{  'fromFolder' : 'js/directives', 'toFolder' : values.rootFolder + '/js/directives'}
 	];
 
 	if(values.restCalls == 'y'){
-		fileSets.push({'fromFolder' : 'css/restcalls', 'toFolder' : values.rootFolder + '/css/restcalls'});
-		fileSets.push({ 'regx' : RegExp(/colors\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'})
-		fileSets.push({ 'regx' : RegExp(/icons\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'})
+		fileSets.push({ 'regx' : RegExp(/flip\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'});
+//		fileSets.push({'fromFolder' : 'css/', 'toFolder' : values.rootFolder + '/css'});
+		fileSets.push({ 'regx' : RegExp(/colors\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'});
+		fileSets.push({ 'regx' : RegExp(/icons\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'});
 	}
 	if(values.dataBinding == 'y'){
 		fileSets.push({ 'regx' : RegExp(/heroes\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'})
+	}
+	if(values.fontawesome == 'y'){
+		fileSets.push({ 'regx' : RegExp(/tile\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'})
 	}
 
 	return fileSets;
@@ -154,13 +163,18 @@ function createPath(fname){
 	var deferred = Q.defer();
 
 	// remove filename off the end of the path/filename string
-	var dir = fname.substring(0,fname.lastIndexOf('/'));
+	// existence of filename dependent on finding a '.' after the last '/'
+	if(fname.substring(fname.lastIndexOf('/')).indexOf('.') != -1){
+		var dir = fname.substring(0,fname.lastIndexOf('/'));
+	} else {
+		var dir = fname;
+	}
 
 	mkdirp(dir, function (err) {
 		if (err) {
 			console.log('createPath error:', err);
 		} else {
-			deferred.resolve('yep');
+			deferred.resolve('createPath successfule');
 		}
 	});
 

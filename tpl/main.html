@@ -1,0 +1,85 @@
+
+	<div  ng-controller='MainCtrl as mainCtrl'>
+		<div class="jumbotron">
+			<h1>Angular Template v0.1</h1>
+			<p class="lead">This angular app template was created by the node app buildIt v0.1.</p>
+			<div class="accordion vertical">
+				<section id='readme'>
+					<h4><a ng-click='mainCtrl.toggleReadme()'>Click for the read me.</a></h4>
+					<div class='readmeContent' ng-class="{'readmeContent_show': mainCtrl.readMe == true}">
+						<p> The node app was created as an exercise to learn nodejs. Creating an angular template with this app required a grasp on many aspects of nodejs, including but not limited to: nodejs structure, use of external files, dependent and parallel asynchronous calls, local file access, and many (many) node modules, such as: sandbox, Q, prompt, fs, exports, readline, jade, ncp, mkdirp and swig. and this does not include the several node modules that were installed then ripped out due to one issue or another. Having the function of this app create an angular template also had one other advantage, it helped me become reacquainted with angularjs. : ) </p>
+						<p>You can fork the node app at <a href='https://github.com/bill209'>github - bill209</a>.</p>
+						<p>Where's the value to you? Well, depending on your skill level, its value is either minimal or non-existent. If you are relatively new to angularjs, then this app will provide you with a custom angularjs template that largely follows the coding patterns as outlined by John Papa.<sup>1</sup> You can read more about his patterns in his <a href=''>Angular Styleguide</a>. </p>
+					</div>
+				</section>
+			</div>
+		</div>
+
+		<div class="row marketing">
+			<div class="col-sm-6 col-md-6 col-6">
+				<h3>Included Packages</h3>
+				<p>Below are a list of included packages:</p>
+
+				<ul class="list-group">
+					<li class="list-group-item">angular.js</li>
+					<li class="list-group-item">bootstrap</li>
+					<li class="list-group-item">firebase</li>
+					<li class="list-group-item">font awesome</li>
+				</ul>
+
+				<h3>Directive: clock</h3>
+				<clock format="HH:mm:ss"></clock>
+				<h3>Directive: name</h3>
+				<div my-customer></div>
+
+				<h3>Filter: limit chars</h3>
+				{% raw %} <p> {{mainCtrl.gettysburg | cut:true:100:' ...'}}</p>{% endraw %}
+
+			</div>
+
+			<div class="col-sm-6 col-md-6 col-lg-6">
+
+				<h3>Data Binding: super heroes</h3>
+				<div class='well'>
+					Sort by:
+					<select ng-model="mainCtrl.orderProp">
+						<option value="name">Name</option>
+						<option value="publisher">Publisher</option>
+					</select>
+
+					<ul id='heroes' class="list-unstyled">
+						<li ng-repeat="hero in heroes | filter:query | orderBy:mainCtrl.orderProp">
+{% raw %}
+							<span>{{hero.name}}</span>
+							<span>{{hero.publisher}}</span>
+{% endraw %}
+						</li>
+					</ul>
+				</div>
+
+				<h3>Firebase: thoughts</h3>
+				<div  id='firebase' class='well' ng-controller='FirebaseCtrl as fbCtrl' ng-init='fbCtrl.checkIfRecordsExists()'>
+					<h4>submit a thought</h4>
+					<input  placeholder="what you thinking?" ng-model="t.pondering" ng-required='true'>
+					<button type="submit" class="btn btn-default" ng-click="fbCtrl.addThought(t)" >Submit</button>
+
+					<p ng-hide="fbCtrl.thoughts.length > 0">there are no thoughts at this moment</p>
+					<p ng-show="fbCtrl.thoughts.length > 0">thoughts of the moment</p>
+					<ul ng-show="fbCtrl.thoughts.length > 0">
+						<li 	ng-repeat='(k, thought) in fbCtrl.thoughts'
+							ng-class="{'boldDelete' : fbCtrl.hoverDelete == $index}">{% raw %}{{thought.pondering}}{% endraw %}
+								<span class='delete'
+									ng-click='fbCtrl.thoughts.$remove(k);fbCtrl.hoverDelete = -1;'
+									ng-mouseover="fbCtrl.hoverDelete = $index"
+									ng-mouseleave="fbCtrl.hoverDelete = -1">x
+								</span>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+		<div class='row footnotes' ng-class="{'readmeContent_show': mainCtrl.readMe == true}">
+			<p><sup>1</sup> Please note that Mr Papa has in no way endorsed this app and any angularjs ugliness herein should be laid entirely at my feet.</p>
+		</div>
+	</div>
