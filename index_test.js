@@ -14,12 +14,12 @@ results = {};
 //		.then(function(userInput){
 //			results = userInput;  // converting to global to pass down the line
 
-results = { appName: 'a.none',
+results = { appName: 'a.dataBinding',
   author: 'billbobb',
-  appFolder: 'a.none',
-  rootFolder: '/Users/billrowland/Sites/repos/buildIt/newApp/a.none',
-  dataBinding: 'n',
-  directives: 'n',
+  appFolder: 'a.dataBinding',
+  rootFolder: '/Users/billrowland/Sites/repos/buildIt/newApp/a.dataBinding',
+  dataBinding: 'y',
+  directives: 'y',
   filters: 'n',
   restCalls: 'n',
   bootstrap: 'n',

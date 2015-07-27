@@ -18,9 +18,14 @@ body {
 	color: #ddd;
 }
 
+/* --------------------------- container  section --------------------------- */
+
+{% if values.bootstrap == 'n' %}
+.container { padding: 20px; }
+{% endif %}
 /* --------------------------- routing/nav  section --------------------------- */
 
-{% if bootstrap %}
+{% if values.bootstrap == 'y' %}
 /* this lightens the nav items on the dark background of the about page */
 ul.navbar-right li a.hiliteNav:hover { color: #ddd; }
 
@@ -72,6 +77,10 @@ ul.navbar li {
 }
 .readmeContent p {
 	font-size: 15px;
+}
+
+.footnotes p {
+	margin-top: 10px;
 }
 
 .readmeContent, .footnotes {
