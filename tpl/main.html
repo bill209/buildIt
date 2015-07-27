@@ -38,7 +38,7 @@
 				<h3>Directive: name</h3>
 				<div my-customer></div>
 				{% endif %}
-				{% if values.filter == 'y' %}
+				{% if values.filters == 'y' %}
 				<h3>Filter: limit chars</h3>
 				{% raw %} <p> {{mainCtrl.gettysburg | cut:true:100:' ...'}}</p>{% endraw %}
 				{% endif %}
