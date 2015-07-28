@@ -14,7 +14,10 @@ exports.buildManyFiles = function(values){
 	var filesToBuild = [
 		{'fname' : 'index.html', 'tplName' : 'index.html'},
 		{'fname' : 'views/main.html', 'tplName' : 'main.html'},
-		{'fname' : 'css/main.css', 'tplName' : 'main.css'}
+		{'fname' : 'css/main.css', 'tplName' : 'main.css'},
+		{'fname' : 'js/controllers.js', 'tplName' : 'controllers.js'},
+		{'fname' : 'js/main.js', 'tplName' : 'main.js'},
+		{'fname' : 'js/svc.js', 'tplName' : 'svc.js'}
 	];
 	var tplDir = 'tpl/';
 	for (var i = 0; i < filesToBuild.length; i++) {

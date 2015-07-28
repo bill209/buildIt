@@ -67,26 +67,34 @@ function prepareFileSet(values){
 		{ 'regx' : RegExp(/normalize\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
 //		{ 'regx' : RegExp(/.*\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'},
 		{ 'regx' : RegExp(/main\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
-		{ 'regx' : RegExp(/svc\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
-		{ 'regx' : RegExp(/controllers\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
-		{ 'regx' : RegExp(/filters\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
-		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'},
-		{  'fromFolder' : 'js/directives', 'toFolder' : values.rootFolder + '/js/directives'}
+//		{ 'regx' : RegExp(/svc\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+//		{ 'regx' : RegExp(/controllers\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+//		{ 'regx' : RegExp(/filters\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'},
+		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'}
+//		{  'fromFolder' : 'js/directives', 'toFolder' : values.rootFolder + '/js/directives'}
 	];
-
+	if(values.directives){
+		fileSets.push({  'fromFolder' : 'js/directives', 'toFolder' : values.rootFolder + '/js/directives'});
+		fileSets.push({ 'regx' : RegExp(/clock\.js/) , 'fromFolder' : 'js/directives',  'toFolder' : values.rootFolder + '/js/directives'});
+		fileSets.push({ 'regx' : RegExp(/myCustomer\.js/) , 'fromFolder' : 'js/directives',  'toFolder' : values.rootFolder + '/js/directives'});
+		fileSets.push({ 'regx' : RegExp(/filters\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'});
+	}
+	if(values.filters == 'y'){
+		fileSets.push({ 'regx' : RegExp(/filters\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'});
+	}
 	if(values.restCalls == 'y'){
 		fileSets.push({ 'regx' : RegExp(/flip\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'});
 //		fileSets.push({'fromFolder' : 'css/', 'toFolder' : values.rootFolder + '/css'});
-		fileSets.push({ 'regx' : RegExp(/colors\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'});
 		fileSets.push({ 'regx' : RegExp(/icons\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'});
+		fileSets.push({ 'regx' : RegExp(/toggleClass\.js/) , 'fromFolder' : 'js/directives',  'toFolder' : values.rootFolder + '/js/directives'});
 	}
 	if(values.dataBinding == 'y'){
 		fileSets.push({ 'regx' : RegExp(/heroes\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'})
 	}
 	if(values.fontawesome == 'y'){
+		fileSets.push({ 'regx' : RegExp(/colors\.json/) , 'fromFolder' : 'data',  'toFolder' : values.rootFolder + '/data'});
 		fileSets.push({ 'regx' : RegExp(/tile\.css/) , 'fromFolder' : 'css',  'toFolder' : values.rootFolder + '/css'})
 	}
-
 	return fileSets;
 }
 

@@ -1,8 +1,9 @@
 (function() {
 	'use strict';
 
-//------------------------------ services  ------------------------------
 
+{% if values.configuration == 'y' %}
+//------------------------------ services  ------------------------------
 	angular
 		.module('Appology')
 		.service('configuration', function() {
@@ -10,9 +11,10 @@
 				return "hi world!";
 			};
 		});
-
+{% endif %}
 //------------------------------ factories  ------------------------------
 
+{% if values.dataBinding == 'y' %}
 //------------------------------ heroes factory  ------------------------------
 	angular
 		.module('Appology')
@@ -30,7 +32,8 @@
 				}
 			}
 		});
-
+{% endif %}
+{% if values.fontawesome == 'y' %}
 //------------------------------ colorTiles factory  ------------------------------
 	angular
 		.module('Appology')
@@ -58,7 +61,8 @@
 				}
 			}
 		});
-
+{% endif %}
+{% if values.restCalls == 'y' %}
 //------------------------------ restCalls factory  ------------------------------
 	angular
 		.module('Appology')
@@ -106,7 +110,8 @@
 			}
 
 		});
-
+{% endif %}
+{% if values.firebase == 'y' %}
 //------------------------------ firebase factory  ------------------------------
 	angular
 		.module('Appology')
@@ -127,4 +132,5 @@
 			}
 		}
 	});
+{% endif %}
 })();

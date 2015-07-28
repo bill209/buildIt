@@ -18,12 +18,13 @@ results = { appName: 'a.dataBinding',
   author: 'billbobb',
   appFolder: 'a.dataBinding',
   rootFolder: '/Users/billrowland/Sites/repos/buildIt/newApp/a.dataBinding',
-  dataBinding: 'n',
-  directives: 'n',
-  filters: 'n',
+  dataBinding: 'y',
+  directives: 'y',
+  filters: 'y',
   restCalls: 'n',
   bootstrap: 'n',
-  firebase: 'n',
+  firebase: 'y',
+  configuration: 'n',
   fontawesome: 'n' };
 
 			sbox.processInput(results)									// process the user input

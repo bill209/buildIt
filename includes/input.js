@@ -38,30 +38,25 @@ if(skippy == 'y') {
 				answers.rootFolder = CURDIR  + '/newApp/' + answers.appFolder;
 				rl.question("data binding (y): ", function(answer) {
 					answers.dataBinding = answer == "" ? 'y' : answer;
-
 					rl.question("directives (y): ", function(answer) {
 						answers.directives = answer == "" ? 'y' : answer;
-
 						rl.question("filters (y): ", function(answer) {
 							answers.filters = answer == "" ? 'y' : answer;
-
 							rl.question("include REST calls (y): ", function(answer) {
 								answers.restCalls = answer == "" ? 'y' : answer;
-
 								rl.question("include bootstrap (y): ", function(answer) {
 									answers.bootstrap = answer == "" ? 'y' : answer;
-
 									rl.question("include firebase (y): ", function(answer) {
 										answers.firebase = answer == "" ? 'y' : answer;
-
-
 										rl.question("include font awesome (y): ", function(answer) {
 											answers.fontawesome = answer == "" ? 'y' : answer;
-
+											rl.question("include configuration  (y): ", function(answer) {
+												answers.configuration = answer == "" ? 'y' : answer;
 
 											deferred.resolve(answers);
 											rl.close();
 
+											});
 										});
 									});
 								});

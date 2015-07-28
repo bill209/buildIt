@@ -5,30 +5,12 @@
 	angular
 		.module('Appology')
 		.controller('test', function($scope){
-			$scope.testClass1 = false;
-			$scope.testClass2 = false;
-
-			$scope.applyClass2 = function(){
-				if($scope.testClass2){
-					$scope.testClass2 = false;
-				} else {
-					$scope.testClass2 = true;
-				}
-			}
-			$scope.applyClass3 = function(){
-				if($scope.testClass3){
-					$scope.testClass3 = false;
-				} else {
-					$scope.testClass3 = true;
-				}
-			}
 		});
 
 // about view controller
 	angular
 		.module('Appology')
 		.controller('aboutCtrl',function($scope){
-
 		});
 
 //  body controller
@@ -46,34 +28,48 @@
 			this.isAbout = function(bmd){
 				return $location.path() === '/about';
 			}
-
 		});
 
 // main view controller
 	angular
 		.module('Appology')
-		.controller('MainCtrl', function ($scope, configuration, heroesFactory){
-			this.heroes = {};
+		.controller('MainCtrl', function ($scope
+			{% if values.configuration == 'y' %}, configuration {% endif%}
+			{% if values.dataBinding == 'y' %}, heroesFactory {% endif%}
+			){
+			// readme content
 			this.readMe = false;
-			this.orderProp = 'name';
-			this.customer = {
-				name: 'Naomi',
-				address: '1600 Amphitheatre'
-			};
-			this.gettysburg = 'Four score and seven years ago our fathers brought forth, upon this continent, a new nation, conceived in liberty, and dedicated to the proposition that /"all men are created equal./"';
-
-			var promise = heroesFactory.getHeroes();
-			promise.then(function(heroData){
-				$scope.heroes = heroData;
-			});
-
-			configuration.initialize();
 
 			this.toggleReadme = function(){
 				this.readMe = !this.readMe;
 			}
+			// data binding
+			{% if values.dataBinding == 'y' %}
+				this.orderProp = 'name';
+				this.heroes = {};
+				var promise = heroesFactory.getHeroes();
+				promise.then(function(heroData){
+					$scope.heroes = heroData;
+				});
+			{% endif %}
+			// filters
+			{% if values.filters == 'y' %}
+				this.gettysburg = 'Four score and seven years ago our fathers brought forth, upon this continent, a new nation, conceived in liberty, and dedicated to the proposition that /"all men are created equal./"';
+			{% endif %}
+			// directives
+			{% if values.directives == 'y' %}
+				this.customer = {
+					name: 'Naomi',
+					address: '1600 Amphitheatre'
+				};
+			{% endif %}
+
+			{% if values.configuration == 'y' %}
+				configuration.initialize();
+			{% endif %}
 		});
 
+{% if values.restCalls == 'y' %}
 // restCalls view controller
 	angular
 		.module('Appology')
@@ -96,7 +92,8 @@
 				$scope.books = bookData;
 			});
 		});
-
+{% endif %}
+{% if values.fontawesome == 'y' %}
 // colors view controller
 	angular
 		.module('Appology')
@@ -116,7 +113,10 @@
 				});
 			});
 		});
+{% endif %}
 
+{% if values.firebase == 'y' %}
+	// firebase controller
 	angular
 		.module('Appology')
 		.controller('FirebaseCtrl', fbCtrl );
@@ -139,5 +139,5 @@
 			}
 			vm.getThoughts();
 		}
-
+{% endif %}
 })();
