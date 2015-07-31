@@ -21,11 +21,11 @@ results = { appName: 'a.dataBinding',
   dataBinding: 'y',
   directives: 'y',
   filters: 'y',
-  restCalls: 'n',
-  bootstrap: 'n',
+  restCalls: 'y',
+  bootstrap: 'y',
   firebase: 'y',
   configuration: 'n',
-  fontawesome: 'n' };
+  fontawesome: 'y' };
 
 			sbox.processInput(results)									// process the user input
 			.then(function(msg){

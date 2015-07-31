@@ -1,81 +1,81 @@
-<div id='restCalls' ng-controller="restCallsCtrl" class='container'>
+<div id='restCalls' ng-controller="RestCallsCtrl as restCallsCtrl" class='container'>
 	<div class="row">
 		<div class='col-sm-1 col-md-1 col-lg-1'></div>
 		<div class='col-sm-10 col-md-10 col-lg-10 well'>
 
 			<div class="col-sm-4 col-md-4 col-lg-4 grey_box">
-				<div class="flip"> 
-					<div class="card" toggle-class="flipped"> 
-						<div class="face front"> 
+				<div class="flip">
+					<div class="card" toggle-class="flipped">
+						<div class="face front">
 							<div class='rest_results'>
-								<h4>{{artist}}<br/><small>iTunes Songs</small></h4>
+								<h4>{{restCallsCtrl.artist}}<br/><small>iTunes Songs</small></h4>
 								<ul id='iTunes' class="list-unstyled">
-									<li ng-repeat="song in iTunes | orderBy:song.releaseDate">
+									<li ng-repeat="song in restCallsCtrl.iTunes | orderBy:song.releaseDate">
 										<span>{{song.trackName}}</span>
 									</li>
 								</ul>
 								<i class="fa fa-1x fa-rotate-left"></i>
 							</div>
-						</div> 
-						<div class="face back"> 
+						</div>
+						<div class="face back">
 							<div class='rest_results'>
 								<h4>the back</h4>
 								<i class="fa fa-1x fa-rotate-right"></i>
 							</div>
-						</div> 
-					</div> 
-				</div> 
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="col-sm-4 col-md-4 col-lg-4 grey_box">
-				<div class="flip"> 
-					<div class="card" toggle-class="flipped"> 
-						<div class="face front"> 
+				<div class="flip">
+					<div class="card" toggle-class="flipped">
+						<div class="face front">
 
 							<div class='rest_results'>
-								<h4>{{author}} Books</h4>
+								<h4>{{restCallsCtrl.author}} Books</h4>
 								<ul id='books' class="list-unstyled">
-									<li ng-repeat="book in books | orderBy:book.volumeInfo.publishDate">
+									<li ng-repeat="book in restCallsCtrl.books | orderBy:book.volumeInfo.publishDate">
 										<span>{{book.volumeInfo.title}}</span>
 									</li>
 								</ul>
 								<i class="fa fa-1x fa-rotate-left"></i>
 							</div>
-						</div> 
-						<div class="face back"> 
+						</div>
+						<div class="face back">
 							<div class='rest_results'>
 								<h4>the back</h4>
 								<i class="fa fa-1x fa-rotate-right"></i>
 							</div>
-						</div> 
-					</div> 
-				</div> 
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="col-sm-4 col-md-4 col-lg-4 grey_box">
-				<div class="flip"> 
-					<div class="card" toggle-class="flipped"> 
-						<div class="face front"> 
+				<div class="flip">
+					<div class="card" toggle-class="flipped">
+						<div class="face front">
 
 							<div class='rest_results'>
 								<h4>People in Space Right Now</h4>
-								<h1 class='big_number'>{{spacePeeps.number}}</h1>
+								<h1 class='big_number'>{{restCallsCtrl.spacePeeps.number}}</h1>
 								<i class="fa fa-1x fa-rotate-left"></i>
 							</div>
-						</div> 
-						<div class="face back"> 
+						</div>
+						<div class="face back">
 							<div class='rest_results'>
 								<h4>Those in Space</h4>
 								<ol id='books' class="list-unstyled">
-									<li ng-repeat="peep in spacePeeps.people">
+									<li ng-repeat="peep in restCallsCtrl.spacePeeps.people">
 										<span>{{peep.name}} is on {{peep.craft}}</span>
 									</li>
 								</ol>
 								<i class="fa fa-1x fa-rotate-right"></i>
 							</div>
-						</div> 
-					</div> 
-				</div> 
+						</div>
+					</div>
+				</div>
 			</div>
 
 		</div>
