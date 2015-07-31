@@ -57,7 +57,7 @@
 			vm.heroes = {};
 			var promise = heroesFactory.getHeroes();
 			promise.then(function(heroData){
-				$scope.heroes = heroData;
+				vm.heroes = heroData;
 			});
 		{% endif %}
 		{% if values.filters == 'y' %}
