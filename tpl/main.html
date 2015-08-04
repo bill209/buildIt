@@ -57,7 +57,7 @@
 					</select>
 
 					<ul id='heroes' class="list-unstyled">
-						<li ng-repeat="hero in heroes | filter:query | orderBy:mainCtrl.orderProp">
+						<li ng-repeat="hero in mainCtrl.heroes | filter:query | orderBy:mainCtrl.orderProp">
 							{% raw %}
 							<span>{{hero.name}}</span>
 							<span>{{hero.publisher}}</span>

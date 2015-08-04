@@ -17,8 +17,15 @@ exports.buildManyFiles = function(values){
 		{'fname' : 'css/main.css', 'tplName' : 'main.css'},
 		{'fname' : 'js/controllers.js', 'tplName' : 'controllers.js'},
 		{'fname' : 'js/main.js', 'tplName' : 'main.js'},
+		{'fname' : 'js/filters.js', 'tplName' : 'filters.js'},
 		{'fname' : 'js/svc.js', 'tplName' : 'svc.js'}
 	];
+	if(values.directives){
+		filesToBuild.push({'fname' : 'js/directives/toggleClass.js', 'tplName' : 'toggleClass.js'});
+		filesToBuild.push({'fname' : 'js/directives/myCustomer.js', 'tplName' : 'myCustomer.js'});
+		filesToBuild.push({'fname' : 'js/directives/clock.js', 'tplName' : 'clock.js'});
+	}
+
 	var tplDir = 'tpl/';
 	for (var i = 0; i < filesToBuild.length; i++) {
 		/* call buildFile with:

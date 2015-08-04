@@ -3,19 +3,19 @@
 
 // test view controller
 	angular
-		.module('Appology')
+		.module('{{ values.appName}}')
 		.controller('test', function($scope){
 		});
 
 // about view controller
 	angular
-		.module('Appology')
+		.module('{{ values.appName}}')
 		.controller('aboutCtrl',function($scope){
 		});
 
 //  body controller
 	angular
-		.module('Appology')
+		.module('{{ values.appName}}')
 		.controller('BodyCtrl',bodyCtrl);
 
 	function bodyCtrl ($scope, $location){
@@ -36,13 +36,14 @@
 
 // main view controller
 	angular
-		.module('Appology')
+		.module('{{ values.appName}}')
 		.controller('MainCtrl', mainCtrl);
 
 	function mainCtrl($scope
 		{% if values.configuration == 'y' %}, configuration {% endif%}
 		{% if values.dataBinding == 'y' %}, heroesFactory {% endif%}
 		){
+console.log('heroesFactory');
 		var vm = this;
 		// readme content
 		vm.readMe = false;
@@ -55,6 +56,7 @@
 			// data binding
 			vm.orderProp = 'name';
 			vm.heroes = {};
+console.log('prepromise');
 			var promise = heroesFactory.getHeroes();
 			promise.then(function(heroData){
 				vm.heroes = heroData;
@@ -80,7 +82,7 @@
 {% if values.restCalls == 'y' %}
 // restCalls view controller
 	angular
-		.module('Appology')
+		.module('{{ values.appName}}')
 		.controller('RestCallsCtrl', restCallsCtrl);
 
 	function restCallsCtrl($scope, $routeParams, restCallsFactory) {
@@ -107,7 +109,7 @@
 {% if values.fontawesome == 'y' %}
 // colors view controller
 	angular
-		.module('Appology')
+		.module('{{ values.appName}}')
 		.controller('ColorsCtrl', colorsCtrl);
 
 	function colorsCtrl($scope, colorTilesFactory){
@@ -133,7 +135,7 @@
 {% if values.firebase == 'y' %}
 	// firebase controller
 	angular
-		.module('Appology')
+		.module('{{ values.appName}}')
 		.controller('FirebaseCtrl', fbCtrl );
 
 	function fbCtrl(firebaseFactory, $firebaseArray){

@@ -3,7 +3,7 @@
 
 	// used by views/restCalls.html to flip the cards
 	angular
-		.module('Appology')
+		.module('{{ values.appName }}')
 		.directive('toggleClass', function() {
 			return {
 				restrict: 'A',

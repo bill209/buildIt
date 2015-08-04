@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('Appology')
+		.module('{{ values.appName }}')
 		.directive('clock', ['dateFilter', '$timeout', function(dateFilter, $timeout){
 			return {
 				restrict: 'E',

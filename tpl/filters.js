@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('Appology')
+		.module('{{ values.appName }}')
 		.filter('cut', function () {
 			return function (value, wordwise, max, tail) {
 				if (!value) return '';

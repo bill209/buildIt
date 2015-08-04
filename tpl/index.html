@@ -19,7 +19,7 @@
 	<link rel="stylesheet" href="css/main.css">
 </head>
 <!-- appName -->
-<body ng-app="Appology" ng-controller='BodyCtrl as bodyCtrl' ng-style='bodyCtrl.bodyBgColor'>
+<body ng-app="{{ values.appName }}" ng-controller='BodyCtrl as bodyCtrl' ng-style='bodyCtrl.bodyBgColor'>
 	<div class='container'>
 
 {% if values.bootstrap == 'y' %}

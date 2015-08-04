@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('Appology',['ngRoute'
+		.module('{{ values.appName}}',['ngRoute'
 {% if values.firebase == 'y' %}
 			,'firebase'
 {% endif %}
@@ -10,7 +10,7 @@
 
 	// routing
 	angular
-		.module('Appology')
+		.module('{{ values.appName}}')
 		.config(['$routeProvider',
 			function($routeProvider) {
 				$routeProvider.

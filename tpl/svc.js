@@ -5,7 +5,7 @@
 {% if values.configuration == 'y' %}
 //------------------------------ services  ------------------------------
 	angular
-		.module('Appology')
+		.module({{ values.appName }})
 		.service('configuration', function() {
 			this.initialize = function(){
 				return "hi world!";
@@ -17,7 +17,7 @@
 {% if values.dataBinding == 'y' %}
 //------------------------------ heroes factory  ------------------------------
 	angular
-		.module('Appology')
+		.module('{{ values.appName }}')
 		.factory('heroesFactory', function($q, $http){
 			return {
 				getHeroes: function(){
@@ -36,7 +36,7 @@
 {% if values.fontawesome == 'y' %}
 //------------------------------ colorTiles factory  ------------------------------
 	angular
-		.module('Appology')
+		.module('{{ values.appName }}')
 		.factory('colorTilesFactory', function($q, $http) {
 			return {
 				getColors: function(){
@@ -65,7 +65,7 @@
 {% if values.restCalls == 'y' %}
 //------------------------------ restCalls factory  ------------------------------
 	angular
-		.module('Appology')
+		.module('{{ values.appName }}')
 		.factory('restCallsFactory', function($q, $http){
 			return {
 				// http get
@@ -114,7 +114,7 @@
 {% if values.firebase == 'y' %}
 //------------------------------ firebase factory  ------------------------------
 	angular
-		.module('Appology')
+		.module('{{ values.appName }}')
 		.factory('firebaseFactory',function($q,$http,$firebaseArray){
 
 		var myFirebase = 'https://boiling-fire-3340.firebaseio.com/thoughts/';
