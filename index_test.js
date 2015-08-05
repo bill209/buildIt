@@ -18,14 +18,14 @@ results = { appName: 'Appology',
   author: 'billbobb',
   appFolder: 'appology',
   rootFolder: '/Users/billrowland/Sites/repos/buildIt/newApp/appology',
-  dataBinding: 'y',
-  directives: 'y',
-  filters: 'y',
-  restCalls: 'y',
-  bootstrap: 'y',
-  firebase: 'y',
+  dataBinding: 'n',
+  directives: 'n',
+  filters: 'n',
+  restCalls: 'n',
+  bootstrap: 'n',
+  firebase: 'n',
   configuration: 'n',
-  fontawesome: 'y' };
+  fontawesome: 'n' };
 
 			sbox.processInput(results)									// process the user input
 			.then(function(msg){
