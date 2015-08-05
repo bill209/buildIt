@@ -1,18 +1,5 @@
 (function() {
 	'use strict';
-
-// test view controller
-	angular
-		.module('{{ values.appName}}')
-		.controller('test', function($scope){
-		});
-
-// about view controller
-	angular
-		.module('{{ values.appName}}')
-		.controller('aboutCtrl',function($scope){
-		});
-
 //  body controller
 	angular
 		.module('{{ values.appName}}')
@@ -43,7 +30,7 @@
 		{% if values.configuration == 'y' %}, configuration {% endif%}
 		{% if values.dataBinding == 'y' %}, heroesFactory {% endif%}
 		){
-console.log('heroesFactory');
+
 		var vm = this;
 		// readme content
 		vm.readMe = false;
@@ -56,7 +43,6 @@ console.log('heroesFactory');
 			// data binding
 			vm.orderProp = 'name';
 			vm.heroes = {};
-console.log('prepromise');
 			var promise = heroesFactory.getHeroes();
 			promise.then(function(heroData){
 				vm.heroes = heroData;

@@ -20,8 +20,7 @@ exports.buildManyFiles = function(values){
 		{'fname' : 'js/filters.js', 'tplName' : 'filters.js'},
 		{'fname' : 'js/svc.js', 'tplName' : 'svc.js'}
 	];
-	if(values.directives){
-		filesToBuild.push({'fname' : 'js/directives/toggleClass.js', 'tplName' : 'toggleClass.js'});
+	if(values.directives == 'y'){
 		filesToBuild.push({'fname' : 'js/directives/myCustomer.js', 'tplName' : 'myCustomer.js'});
 		filesToBuild.push({'fname' : 'js/directives/clock.js', 'tplName' : 'clock.js'});
 	}

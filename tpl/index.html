@@ -74,22 +74,22 @@
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-route.min.js"></script>
-{% if values.bootstrap == 'y' || true %}
+{% if values.bootstrap == 'y' %}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script><!-- required for bootstrap -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
 {% endif %}
 	<script src='js/main.js'></script>
-{% if values.directives == 'y' || true %}
+{% if values.directives == 'y' %}
 	<script src='js/directives/toggleClass.js'></script>
 	<script src='js/directives/clock.js'></script>
 	<script src='js/directives/myCustomer.js'></script>
 {% endif %}
-{% if values.filters == 'y' || true %}
+{% if values.filters == 'y' %}
 	<script src='js/filters.js'></script>
 {% endif %}
 	<script src='js/svc.js'></script>
 	<script src='js/controllers.js'></script>
-{% if values.firebase == 'y' || true %}
+{% if values.firebase == 'y' %}
 	<!-- firebase -->
 	<script src="https://cdn.firebase.com/v0/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
