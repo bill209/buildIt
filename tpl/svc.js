@@ -1,7 +1,5 @@
 (function() {
 	'use strict';
-
-
 {% if values.configuration == 'y' %}
 //------------------------------ services  ------------------------------
 	angular
@@ -12,8 +10,9 @@
 			};
 		});
 {% endif %}
+{% if values.dataBinding == 'y' || values.fontawesome == 'y' || values.restCalls == 'y' || values.firebase == 'y' %}
 //------------------------------ factories  ------------------------------
-
+{% endif %}
 {% if values.dataBinding == 'y' %}
 //------------------------------ heroes factory  ------------------------------
 	angular

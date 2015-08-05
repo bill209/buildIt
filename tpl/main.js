@@ -30,9 +30,6 @@
 					templateUrl: 'views/colors.html'
 				}).
 {% endif %}
-				when('/test', {
-					templateUrl: 'views/test.html'
-				}).
 				otherwise({
 					redirectTo: '/main'
 				});

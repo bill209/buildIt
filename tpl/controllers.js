@@ -26,11 +26,7 @@
 		.module('{{ values.appName}}')
 		.controller('MainCtrl', mainCtrl);
 
-	function mainCtrl($scope
-		{% if values.configuration == 'y' %}, configuration {% endif%}
-		{% if values.dataBinding == 'y' %}, heroesFactory {% endif%}
-		){
-
+	function mainCtrl($scope{% if values.configuration == 'y' %}, configuration {% endif%}{% if values.dataBinding == 'y' %}, heroesFactory {% endif%}){
 		var vm = this;
 		// readme content
 		vm.readMe = false;
@@ -39,7 +35,7 @@
 		function toggleReadme(){
 			this.readMe = !this.readMe;
 		}
-		{% if values.dataBinding == 'y' %}
+{% if values.dataBinding == 'y' %}
 			// data binding
 			vm.orderProp = 'name';
 			vm.heroes = {};
@@ -47,22 +43,21 @@
 			promise.then(function(heroData){
 				vm.heroes = heroData;
 			});
-		{% endif %}
-		{% if values.filters == 'y' %}
+{% endif %}
+{% if values.filters == 'y' %}
 			// filters
 			vm.gettysburg = 'Four score and seven years ago our fathers brought forth, upon this continent, a new nation, conceived in liberty, and dedicated to the proposition that /"all men are created equal./"';
-		{% endif %}
-		{% if values.directives == 'y' %}
+{% endif %}
+{% if values.directives == 'y' %}
 			// directives
 			vm.customer = {
 				name: 'Naomi',
 				address: '1600 Amphitheatre'
 			};
-		{% endif %}
-
-		{% if values.configuration == 'y' %}
+{% endif %}
+{% if values.configuration == 'y' %}
 			configuration.initialize();
-		{% endif %}
+{% endif %}
 	};
 
 {% if values.restCalls == 'y' %}

@@ -73,13 +73,7 @@ function prepareFileSet(values){
 		{  'fromFolder' : 'views', 'toFolder' : values.rootFolder + '/views'}
 //		{  'fromFolder' : 'js/directives', 'toFolder' : values.rootFolder + '/js/directives'}
 	];
-	if(values.directives){
-//		fileSets.push({  'fromFolder' : 'js/directives', 'toFolder' : values.rootFolder + '/js/directives'});
-//		fileSets.push({ 'regx' : RegExp(/clock\.js/) , 'fromFolder' : 'js/directives',  'toFolder' : values.rootFolder + '/js/directives'});
-//		fileSets.push({ 'regx' : RegExp(/myCustomer\.js/) , 'fromFolder' : 'js/directives',  'toFolder' : values.rootFolder + '/js/directives'});
-		fileSets.push({ 'regx' : RegExp(/filters\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'});
-	}
-	if(values.filters == 'y'){
+	if(values.directives == 'y' || values.filters == 'y'){
 		fileSets.push({ 'regx' : RegExp(/filters\.js/) , 'fromFolder' : 'js',  'toFolder' : values.rootFolder + '/js'});
 	}
 	if(values.restCalls == 'y'){
