@@ -97,7 +97,7 @@ ul.navbar li {
 	margin-bottom: 10px;
 }
 {% endif %}
-{% if values.restCalls == 'y' %}
+{% if values.restCalls == 'y' && values.bootstrap == 'y' %}
 /* --------------------------- rest calls --------------------------- */
 .rest_results{
 	padding: 10px;
@@ -114,6 +114,25 @@ ul.navbar li {
 	font-size: 160px;
 	text-align: center;
 	color: #888;
+}
+{% elseif  values.restCalls == 'y' %}
+.rest_results{
+/*	height: 300px;*/
+}
+.rest_results i{
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+}
+.big_number {
+	font-size: 160px;
+	line-height: 120px;
+	margin: 0px;
+	color: #888;
+}
+.space {
+	float: left;
+	width: 260px;
 }
 {% endif %}
 {% if values.fontawesome == 'y' %}
