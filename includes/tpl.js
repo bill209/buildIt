@@ -16,9 +16,11 @@ exports.buildManyFiles = function(values){
 		{'fname' : 'views/main.html', 'tplName' : 'main.html'},
 		{'fname' : 'css/main.css', 'tplName' : 'main.css'},
 		{'fname' : 'js/controllers.js', 'tplName' : 'controllers.js'},
-		{'fname' : 'js/main.js', 'tplName' : 'main.js'},
-		{'fname' : 'js/svc.js', 'tplName' : 'svc.js'}
+		{'fname' : 'js/main.js', 'tplName' : 'main.js'}
 	];
+	if(values.dataBinding == 'y' || values.fontawesome == 'y' || values.restCalls == 'y' || values.firebase == 'y'){
+		filesToBuild.push({'fname' : 'js/svc.js', 'tplName' : 'svc.js'});
+	}
 	if(values.directives == 'y'){
 		filesToBuild.push({'fname' : 'js/directives/myCustomer.js', 'tplName' : 'myCustomer.js'});
 		filesToBuild.push({'fname' : 'js/directives/clock.js', 'tplName' : 'clock.js'});
