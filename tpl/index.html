@@ -87,7 +87,9 @@
 {% if values.filters == 'y' %}
 	<script src='js/filters.js'></script>
 {% endif %}
+{% if values.configuration == 'y' || values.dataBinding == 'y' || values.fontawesome == 'y' || values.restCalls == 'y' || values.firebase == 'y' %}
 	<script src='js/svc.js'></script>
+{% endif %}
 	<script src='js/controllers.js'></script>
 {% if values.firebase == 'y' %}
 	<!-- firebase -->

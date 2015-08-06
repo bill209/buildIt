@@ -18,7 +18,7 @@ exports.buildManyFiles = function(values){
 		{'fname' : 'js/controllers.js', 'tplName' : 'controllers.js'},
 		{'fname' : 'js/main.js', 'tplName' : 'main.js'}
 	];
-	if(values.dataBinding == 'y' || values.fontawesome == 'y' || values.restCalls == 'y' || values.firebase == 'y'){
+	if(values.configuration == 'y' || values.dataBinding == 'y' || values.fontawesome == 'y' || values.restCalls == 'y' || values.firebase == 'y'){
 		filesToBuild.push({'fname' : 'js/svc.js', 'tplName' : 'svc.js'});
 	}
 	if(values.directives == 'y'){
