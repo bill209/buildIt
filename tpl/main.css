@@ -116,16 +116,21 @@ ul.navbar li {
 	color: #888;
 }
 {% elseif  values.restCalls == 'y' %}
+.container {
+	overflow: auto;
+}
 .card {
 	display: inline-block;
 	width: 300px;
-	height: 500px;
+	height: 300px;
 	padding: 10px;
 	background-color: #ddd;
 	border: solid 1px #888;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
+	float: left;
+	margin-right: 10px;
 }
 {% endif %}
 {% if values.fontawesome == 'y' %}

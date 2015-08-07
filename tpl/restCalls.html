@@ -1,4 +1,5 @@
 <div id='restCalls' ng-controller="RestCallsCtrl as restCallsCtrl" class='container'>
+{% if values.bootstrap == 'y'%}
 	<div class="row">
 		<div class='col-sm-1 col-md-1 col-lg-1'></div>
 		<div class='col-sm-10 col-md-10 col-lg-10 well'>
@@ -8,10 +9,10 @@
 					<div class="card" toggle-class="flipped">
 						<div class="face front">
 							<div class='rest_results'>
-								<h4>{{restCallsCtrl.artist}}<br/><small>iTunes Songs</small></h4>
+{% raw %}						<h4>{{restCallsCtrl.artist}}<br/><small>iTunes Songs</small></h4>{% endraw %}
 								<ul id='iTunes' class="list-unstyled">
 									<li ng-repeat="song in restCallsCtrl.iTunes | orderBy:song.releaseDate">
-										<span>{{song.trackName}}</span>
+{% raw %}								<span>{{song.trackName}}</span>{% endraw %}
 									</li>
 								</ul>
 								<i class="fa fa-1x fa-rotate-left"></i>
@@ -33,10 +34,10 @@
 						<div class="face front">
 
 							<div class='rest_results'>
-								<h4>{{restCallsCtrl.author}} Books</h4>
+{% raw %}						<h4>{{restCallsCtrl.author}} Books</h4>{% endraw %}
 								<ul id='books' class="list-unstyled">
 									<li ng-repeat="book in restCallsCtrl.books | orderBy:book.volumeInfo.publishDate">
-										<span>{{book.volumeInfo.title}}</span>
+{% raw %}								<span>{{book.volumeInfo.title}}</span>{% endraw %}
 									</li>
 								</ul>
 								<i class="fa fa-1x fa-rotate-left"></i>
@@ -59,7 +60,7 @@
 
 							<div class='rest_results'>
 								<h4>People in Space Right Now</h4>
-								<h1 class='big_number'>{{restCallsCtrl.spacePeeps.number}}</h1>
+{% raw %}						<h1 class='big_number'>{{restCallsCtrl.spacePeeps.number}}</h1>{% endraw %}
 								<i class="fa fa-1x fa-rotate-left"></i>
 							</div>
 						</div>
@@ -68,7 +69,7 @@
 								<h4>Those in Space</h4>
 								<ol id='books' class="list-unstyled">
 									<li ng-repeat="peep in restCallsCtrl.spacePeeps.people">
-										<span>{{peep.name}} is on {{peep.craft}}</span>
+{% raw %}								<span>{{peep.name}} is on {{peep.craft}}</span>{% endraw %}
 									</li>
 								</ol>
 								<i class="fa fa-1x fa-rotate-right"></i>
@@ -80,4 +81,35 @@
 
 		</div>
 	</div>
+{% else %}
+	<div class='card'>
+{% raw %}<h4>{{restCallsCtrl.artist}}<br/><small>iTunes Songs</small></h4>{% endraw %}
+		<ul id='iTunes' class="list-unstyled">
+			<li ng-repeat="song in restCallsCtrl.iTunes | orderBy:song.releaseDate">
+{% raw %}		<span>{{song.trackName}}</span>{% endraw %}
+			</li>
+		</ul>
+	</div>
+
+	<div class='card'>
+{% raw %}<h4>{{restCallsCtrl.author}} Books</h4>{% endraw %}
+		<ul id='books' class="list-unstyled">
+			<li ng-repeat="book in restCallsCtrl.books | orderBy:book.volumeInfo.publishDate">
+{% raw %}		<span>{{book.volumeInfo.title}}</span>{% endraw %}
+			</li>
+		</ul>
+	</div>
+
+	<div class='card'>
+		<h4>People in Space Right Now</h4>
+{% raw %}<h1 class='big_number'>{{restCallsCtrl.spacePeeps.number}}</h1>{% endraw %}
+
+		<h4>Those in Space</h4>
+		<ol id='books' class="list-unstyled">
+			<li ng-repeat="peep in restCallsCtrl.spacePeeps.people">
+{% raw %}		<span>{{peep.name}} is on {{peep.craft}}</span>{% endraw %}
+			</li>
+		</ol>
+	</div>
+{% endif %}
 </div>

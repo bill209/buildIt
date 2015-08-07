@@ -22,7 +22,7 @@ results = { appName: 'Appology',
   directives: 'n',
   filters: 'n',
   restCalls: 'y',
-  bootstrap: 'n',
+  bootstrap: 'y',
   firebase: 'n',
   configuration: 'n',
   fontawesome: 'n' };

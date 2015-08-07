@@ -28,6 +28,9 @@ exports.buildManyFiles = function(values){
 	if(values.directives == 'y' || values.filters == 'y'){
 		filesToBuild.push({'fname' : 'js/filters.js', 'tplName' : 'filters.js'})
 	}
+	if(values.restCalls == 'y'){
+		filesToBuild.push({'fname' : 'views/restCalls.html', 'tplName' : 'restCalls.html'})
+	}
 	var tplDir = 'tpl/';
 	for (var i = 0; i < filesToBuild.length; i++) {
 		/* call buildFile with:
