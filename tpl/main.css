@@ -116,23 +116,16 @@ ul.navbar li {
 	color: #888;
 }
 {% elseif  values.restCalls == 'y' %}
-.rest_results{
-/*	height: 300px;*/
-}
-.rest_results i{
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
-}
-.big_number {
-	font-size: 160px;
-	line-height: 120px;
-	margin: 0px;
-	color: #888;
-}
-.space {
-	float: left;
-	width: 260px;
+.card {
+	display: inline-block;
+	width: 300px;
+	height: 500px;
+	padding: 10px;
+	background-color: #ddd;
+	border: solid 1px #888;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
 }
 {% endif %}
 {% if values.fontawesome == 'y' %}
