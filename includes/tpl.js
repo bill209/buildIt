@@ -21,6 +21,9 @@ exports.buildManyFiles = function(values){
 	if(values.configuration == 'y' || values.dataBinding == 'y' || values.fontawesome == 'y' || values.restCalls == 'y' || values.firebase == 'y'){
 		filesToBuild.push({'fname' : 'js/svc.js', 'tplName' : 'svc.js'});
 	}
+	if(values.directives == 'y' || values.bootstrap == 'y'){
+		filesToBuild.push({'fname' : 'js/directives/toggleClass.js', 'tplName' : 'toggleClass.js'});
+	}
 	if(values.directives == 'y'){
 		filesToBuild.push({'fname' : 'js/directives/myCustomer.js', 'tplName' : 'myCustomer.js'});
 		filesToBuild.push({'fname' : 'js/directives/clock.js', 'tplName' : 'clock.js'});
