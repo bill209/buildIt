@@ -22,32 +22,36 @@
 
 				<ul class="list-group">
 					<li class="list-group-item">angular.js</li>
-					{% if values.bootstrap == 'y' %}
+{% if values.bootstrap == 'y' %}
 					<li class="list-group-item">bootstrap</li>
-					{% endif %}
-					{% if values.firebase == 'y' %}
+{% endif %}
+{% if values.firebase == 'y' %}
 					<li class="list-group-item">firebase</li>
-					{% endif %}
-					{% if values.fontawesome == 'y' %}
+{% endif %}
+{% if values.fontawesome == 'y' %}
 					<li class="list-group-item">font awesome</li>
-					{% endif %}
+{% endif %}
 				</ul>
-				{% if values.directives == 'y' %}
+{% if values.configuration == 'y' %}
+				<h3>Configuration</h3>
+{% raw %}		<p>{{mainCtrl.message}}</p> {% endraw %}
+{% endif %}
+{% if values.directives == 'y' %}
 				<h3>Directive: clock</h3>
 				<clock format="HH:mm:ss"></clock>
 				<h3>Directive: name</h3>
 				<div my-customer></div>
-				{% endif %}
-				{% if values.filters == 'y' %}
+{% endif %}
+{% if values.filters == 'y' %}
 				<h3>Filter: limit chars</h3>
-				{% raw %} <p> {{mainCtrl.gettysburg | cut:true:100:' ...'}}</p>{% endraw %}
-				{% endif %}
+{% raw %} <p> {{mainCtrl.gettysburg | cut:true:100:' ...'}}</p>{% endraw %}
+{% endif %}
 
 			</div>
 
 			<div class="col-sm-6 col-md-6 col-lg-6">
 
-				{% if values.dataBinding == 'y' %}
+{% if values.dataBinding == 'y' %}
 				<h3>Data Binding: super heroes</h3>
 				<div class='well'>
 					Sort by:
@@ -58,15 +62,15 @@
 
 					<ul id='heroes' class="list-unstyled">
 						<li ng-repeat="hero in mainCtrl.heroes | filter:query | orderBy:mainCtrl.orderProp">
-							{% raw %}
+{% raw %}
 							<span>{{hero.name}}</span>
 							<span>{{hero.publisher}}</span>
-							{% endraw %}
+{% endraw %}
 						</li>
 					</ul>
 				</div>
-				{% endif %}
-				{% if values.firebase == 'y' %}
+{% endif %}
+{% if values.firebase == 'y' %}
 				<h3>Firebase: thoughts</h3>
 				<div  id='firebase' class='well' ng-controller='FirebaseCtrl as fbCtrl' ng-init='fbCtrl.checkIfRecordsExists()'>
 					<h4>submit a thought</h4>
@@ -86,7 +90,7 @@
 						</li>
 					</ul>
 				</div>
-				{% endif %}
+{% endif %}
 			</div>
 		</div>
 		<div class='row footnotes' ng-class="{'readmeContent_show': mainCtrl.readMe == true}">

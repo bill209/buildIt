@@ -56,7 +56,7 @@
 			};
 {% endif %}
 {% if values.configuration == 'y' %}
-			configuration.initialize();
+			vm.message = configuration.initialize();
 {% endif %}
 	};
 

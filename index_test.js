@@ -18,13 +18,13 @@ results = { appName: 'Appology',
   author: 'billbobb',
   appFolder: 'appology',
   rootFolder: '/Users/billrowland/Sites/repos/buildIt/newApp/appology',
-  dataBinding: 'n',
+  dataBinding: 'y',
   directives: 'y',
-  filters: 'n',
-  restCalls: 'y',
+  filters: 'y',
+  restCalls: 'n',
   bootstrap: 'y',
-  firebase: 'n',
-  configuration: 'n',
+  firebase: 'y',
+  configuration: 'y',
   fontawesome: 'n' };
 
 			sbox.processInput(results)									// process the user input
@@ -44,21 +44,3 @@ results = { appName: 'Appology',
 //	}).fail(function(e){ console.log('6',e) });
 
 
-/* files to build
-
-index.html
-/css/
-	normalize.css
-	main.css
-/js/
-	controllers.js
-	main.js
-o	db.js
-o	functions.js
-o	movieAPIs.js
-o	svc.js
-/views/
-	main.html
-o	restCalls.html
-
-*/

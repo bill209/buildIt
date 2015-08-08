@@ -3,10 +3,10 @@
 {% if values.configuration == 'y' %}
 //------------------------------ services  ------------------------------
 	angular
-		.module({{ values.appName }})
+		.module('{{ values.appName }}')
 		.service('configuration', function() {
 			this.initialize = function(){
-				return "hi world!";
+				return "jeeves at your service!";
 			};
 		});
 {% endif %}

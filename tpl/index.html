@@ -83,7 +83,7 @@
 	<script src='js/directives/clock.js'></script>
 	<script src='js/directives/myCustomer.js'></script>
 {% endif %}
-{% if values.bootstrap == 'y' || values.directives == 'y' %}
+{% if (values.bootstrap == 'y' && values.restCalls == 'y') || values.directives == 'y' %}
 	<script src='js/directives/toggleClass.js'></script>
 {% endif %}
 {% if values.filters == 'y' %}
