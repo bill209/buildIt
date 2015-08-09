@@ -46,6 +46,10 @@
 				<h3>Filter: limit chars</h3>
 {% raw %} <p> {{mainCtrl.gettysburg | cut:true:100:' ...'}}</p>{% endraw %}
 {% endif %}
+{% if values.constant == 'y' %}
+				<h3>Constant: quote about constancy</h3>
+				{% raw %} <p><i>'{{mainCtrl.quote.quote}}'</i> by {{mainCtrl.quote.author}}</p>{% endraw %}
+{% endif %}
 
 			</div>
 

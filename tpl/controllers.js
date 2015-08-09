@@ -5,6 +5,13 @@
 		.module('{{ values.appName}}')
 		.controller('BodyCtrl',bodyCtrl);
 
+{% if values.constant == 'y' %}
+	angular
+		.module('{{ values.appName}}')
+		.constant('QUOTE',{ 'quote': 'The only thing that is constant is change.', 'author': 'Heraclitus'});
+{% endif %}
+
+
 	function bodyCtrl ($scope, $location){
 		var vm = this;
 		vm.bodyBgColor={'background-color':'#ffffff'}
@@ -26,7 +33,7 @@
 		.module('{{ values.appName}}')
 		.controller('MainCtrl', mainCtrl);
 
-	function mainCtrl($scope{% if values.configuration == 'y' %}, configuration {% endif%}{% if values.dataBinding == 'y' %}, heroesFactory {% endif%}){
+	function mainCtrl($scope{% if values.constant == 'y' %}, QUOTE {% endif%}{% if values.configuration == 'y' %}, configuration {% endif%}{% if values.dataBinding == 'y' %}, heroesFactory {% endif%}){
 		var vm = this;
 		// readme content
 		vm.readMe = false;
@@ -58,6 +65,12 @@
 {% if values.configuration == 'y' %}
 			vm.message = configuration.initialize();
 {% endif %}
+
+{% if values.constant == 'y' %}
+			vm.quote = {};
+			vm.quote = QUOTE;
+{% endif %}
+
 	};
 
 {% if values.restCalls == 'y' %}

@@ -25,6 +25,7 @@ results = { appName: 'Appology',
   bootstrap: 'y',
   firebase: 'y',
   configuration: 'y',
+  constant: 'y',
   fontawesome: 'n' };
 
 			sbox.processInput(results)									// process the user input

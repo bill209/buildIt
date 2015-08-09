@@ -52,10 +52,13 @@ if(skippy == 'y') {
 											answers.fontawesome = answer == "" ? 'y' : answer;
 											rl.question("include configuration  (y): ", function(answer) {
 												answers.configuration = answer == "" ? 'y' : answer;
+												rl.question("include constant  (y): ", function(answer) {
+													answers.constant = answer == "" ? 'y' : answer;
 
 											deferred.resolve(answers);
 											rl.close();
 
+												});
 											});
 										});
 									});
